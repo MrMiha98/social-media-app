@@ -3,8 +3,12 @@
 import { useState } from "react";
 import supabase from "@/lib/supabase";
 import { CloudUpload } from "lucide-react";
+import Sidebar from "@/components/Sidebar";
+import { useRouter } from "next/navigation";
 
-export default function FileUploadModal() {
+export default function UploadPage() {
+  const router = useRouter();
+
   const [imageFile, setImageFile] = useState(null);
   const [caption, setCaption] = useState("");
   const [loading, setLoading] = useState(false);
@@ -86,7 +90,7 @@ export default function FileUploadModal() {
       setCaption("");
       setImageFile(null);
       setMessage("");
-      window.location.reload();
+      router.push("/home");
     } catch (err) {
       console.error("Unexpected error:", err);
       setMessage("Unexpected error: " + err.message);
@@ -96,10 +100,12 @@ export default function FileUploadModal() {
   };
 
   return (
-    <main className="z-50 fixed bottom-18 left-1/2 -translate-x-1/2 flex flex-col rounded-2xl overflow-hidden space-y-6 bg-white border border-line p-8 w-sm">
+    <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
+      <Sidebar />
+      <div className="flex flex-col w-full max-w-md px-8">
         <h1 className="text-center text-2xl font-bold text-lightforeground">Upload Post</h1>
 
-        <form onSubmit={handleUpload} className="flex flex-col space-y-4">
+        <form onSubmit={handleUpload} className="flex flex-col space-y-4 mt-8">
           <label className="cursor-pointer rounded-md border border-line bg-white p-3 text-sm text-lightforeground hover:bg-gray-100 transition">
             <span>{ imageFile ? imageFile.name : "Browse images…" }</span>
             <input id="image-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden"/>
@@ -108,6 +114,7 @@ export default function FileUploadModal() {
           <button type="submit" disabled={loading} className="w-full flex justify-center items-center gap-x-2 rounded-md p-3 cursor-pointer font-semibold transition text-white bg-sky-500 hover:bg-sky-600">{loading ? "Uploading..." : "Upload"} <CloudUpload size={24} /></button>
           {message ? ( <p className="text-sm text-center text-red-500">{message}</p> ) : null}
         </form>
-    </main>
+      </div>
+    </div>
   );
 }
