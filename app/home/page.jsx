@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase";
 import { Heart, MessageCircle, Upload } from "lucide-react";
-import FloatingNavbar from "@/components/FloatingNavbar";
+import Sidebar from "@/components/Sidebar";
 
 export default function HomePage() {
   const router = useRouter();
@@ -144,7 +144,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4 space-y-4 bg-background text-foreground">
+    <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
       { loading ? (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">Checking authentication...</div>
       ) : (
@@ -156,34 +156,37 @@ export default function HomePage() {
           ) : posts.length === 0 ? (
             <p className="text-gray-400">No posts yet.</p>
           ) : (
-            posts.map((post) => (
-              <div key={post.id} className="border border-line w-full max-w-md bg-white">
-                <div className="px-4 py-3 font-semibold text-sm">{post.username}</div>
+            <>
+              <Sidebar />
+              <div className="flex flex-col space-y-4">
+                { posts.map((post) => (
+                  <div key={post.id} className="border border-line w-full max-w-md bg-white">
+                    <div className="px-4 py-3 font-semibold text-sm">{post.username}</div>
 
-                <img src={post.image_url} alt={post.caption} className="w-full object-cover"/>
+                    <img src={post.image_url} alt={post.caption} className="w-full object-cover"/>
 
-                <div className="px-4 py-3">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                      <button onClick={() => toggleLike(post)}>
-                        <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
-                      </button>
+                    <div className="px-4 py-3">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center space-x-2">
+                          <button onClick={() => toggleLike(post)}>
+                            <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
+                          </button>
 
-                      <span className="text-sm font-bold text-gray-700">{post.likeCount}</span>
+                          <span className="text-sm font-bold text-gray-700">{post.likeCount}</span>
 
-                      <MessageCircle size={24} className="cursor-pointer text-lightforeground hover:text-pink-500 ml-2"/>
+                          <MessageCircle size={24} className="cursor-pointer text-lightforeground hover:text-pink-500 ml-2"/>
+                        </div>
+
+                        <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
+                      </div>
+
+                      <p className="mt-2 text-sm text-gray-800">{post.caption}</p>
                     </div>
-
-                    <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
                   </div>
-
-                  <p className="mt-2 text-sm text-gray-800">{post.caption}</p>
-                </div>
+                ))}
               </div>
-            ))
+            </>
           )}
-
-          <FloatingNavbar />
         </>
       )}
     </div>
