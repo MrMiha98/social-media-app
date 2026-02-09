@@ -158,7 +158,7 @@ export default function HomePage() {
           ) : (
             <>
               <Sidebar />
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-4 mb-14 md:mb-0">
                 { posts.map((post) => (
                   <div key={post.id} className="border border-line w-full max-w-md bg-white">
                     <div className="px-4 py-3 font-semibold text-sm">{post.username}</div>
