@@ -111,7 +111,7 @@ export default function UploadPage() {
             <input id="image-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden"/>
           </label>
           <textarea placeholder="Write a caption..." value={caption} onChange={(e) => setCaption(e.target.value)} className="text-black resize-none w-full rounded-md border border-line p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
-          <button type="submit" disabled={loading} className="w-full flex justify-center items-center gap-x-2 rounded-md p-3 cursor-pointer font-semibold transition text-white bg-sky-500 hover:bg-sky-600">{loading ? "Uploading..." : "Upload"} <CloudUpload size={24} /></button>
+          <button type="submit" disabled={loading} className="w-full flex justify-center items-center gap-x-2 rounded-md p-3 cursor-pointer font-semibold transition text-white bg-black hover:bg-zinc-800">{loading ? "Uploading..." : "Upload"} <CloudUpload size={24} /></button>
           {message ? ( <p className="text-sm text-center text-red-500">{message}</p> ) : null}
         </form>
       </div>
