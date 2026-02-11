@@ -9,7 +9,7 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState({ username: "", bio: "" });
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [bioInput, setBioInput] = useState("");
@@ -24,19 +24,19 @@ export default function ProfilePage() {
       if (!user) {
         setLoading(false);
         return;
+      } else {
+        setUser(user);
       }
 
-      setUser(user);
-
-      const { data } = await supabase
+      const { data: profileInfo } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
         .single();
 
-      if (data) {
-        setProfile({ username: data.username, bio: data.bio || "" });
-        setBioInput(data.bio || "");
+      if (profileInfo) {
+        setProfile(profileInfo || "");
+        setBioInput(profileInfo.bio || "");
       }
 
       const { data: userPosts } = await supabase
@@ -53,8 +53,6 @@ export default function ProfilePage() {
   }, []);
 
   const handleSaveBio = async () => {
-    if (!user) return;
-
     await supabase
       .from("profiles")
       .update({ bio: bioInput })
@@ -83,7 +81,9 @@ export default function ProfilePage() {
       <div className="bg-white border border-line p-6 w-full max-w-md">
           
         <div className="flex items-start space-x-5">
-          <div className="w-28 h-28 rounded-full bg-gray-300 shrink-0"></div>
+          <div className="w-28 h-28 rounded-full overflow-hidden shrink-0">
+            <img src={profile.avatar_url} alt="pfp" />
+          </div>
           <div className="flex flex-col flex-1">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
