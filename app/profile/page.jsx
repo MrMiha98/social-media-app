@@ -71,7 +71,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
         Loading profile...
       </div>
     );
@@ -111,7 +111,7 @@ export default function ProfilePage() {
             <p className="col-span-3 text-center text-gray-400 py-6">No posts yet</p>
           ) : (
             posts.map((post) => (
-              <div key={post.id} className="aspect-square overflow-hidden">
+              <div key={post.id} className="aspect-square overflow-hidden rounded-sm">
                 <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
               </div>
             ))
