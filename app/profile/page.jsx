@@ -20,6 +20,7 @@ export default function ProfilePage() {
       setLoading(true);
 
       const { data: { user } } = await supabase.auth.getUser();
+
       if (!user) {
         setLoading(false);
         return;
@@ -70,7 +71,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         Loading profile...
       </div>
     );
@@ -81,43 +82,36 @@ export default function ProfilePage() {
       <Sidebar />
       <div className="bg-white border border-line p-6 w-full max-w-md">
           
-        {/* Zgornji del */}
         <div className="flex items-start space-x-5">
           <div className="w-28 h-28 rounded-full bg-gray-300 shrink-0"></div>
-
           <div className="flex flex-col flex-1">
-            {/* Username + Logout */}
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
-              <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-red-500 transition">Log out</button>
+              <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-red-500 transition cursor-pointer">Log out</button>
             </div>
-
             <p className="text-gray-500 text-sm">{user.email}</p>
-
-            {/* Bio */}
             <div className="mt-3">
               { editing ? (
                 <div className="flex space-x-2">
-                  <input type="text" value={bioInput} onChange={(e) => setBioInput(e.target.value)} className="flex-1 p-2 rounded-md border border-gray-300 text-black focus:ring-pink-500 text-sm"/>
-                  <button onClick={handleSaveBio} className="px-3 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 text-sm">Save</button>
+                  <input type="text" value={bioInput} onChange={(e) => setBioInput(e.target.value)} className="flex-1 p-2 rounded-md border border-line focus:ring-1 focus:ring-black/10 text-black outline-none text-sm"/>
+                  <button onClick={handleSaveBio} className="px-3 py-2 text-white rounded-md bg-black hover:bg-zinc-800 text-sm cursor-pointer">Save</button>
                 </div>
               ) : (
                 <div className="flex justify-between items-start gap-3">
                   <p className="text-gray-800 text-sm">{profile.bio || "No bio yet"}</p>
-                  <button onClick={() => setEditing(true)} className="text-pink-500 hover:underline text-xs">Edit</button>
+                  <button onClick={() => setEditing(true)} className="text-pink-800 hover:underline text-xs cursor-pointer">Edit</button>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Posts grid */}
         <div className="grid grid-cols-3 gap-1 mt-4">
           { posts.length === 0 ? (
             <p className="col-span-3 text-center text-gray-400 py-6">No posts yet</p>
           ) : (
             posts.map((post) => (
-              <div key={post.id} className="aspect-square bg-gray-100">
+              <div key={post.id} className="aspect-square overflow-hidden">
                 <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
               </div>
             ))
