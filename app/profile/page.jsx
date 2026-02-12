@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase";
 import Sidebar from "@/components/Sidebar";
+import { Image, Plus } from "lucide-react";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -67,6 +68,34 @@ export default function ProfilePage() {
     router.push("/login");
   };
 
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0];
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}.${fileExt}`;
+
+   const { error: uploadError } = await supabase
+    .storage
+    .from("avatars")
+    .update(fileName, file, { upsert: true })
+
+    if (uploadError) {
+      console.log(uploadError);
+      return;
+    }
+
+    const { data: { publicUrl } } = supabase
+      .storage
+      .from("avatars")
+      .getPublicUrl(fileName);
+
+    await supabase
+      .from("profiles")
+      .update({ avatar_url: publicUrl })
+      .eq('id', user.id)
+
+    location.reload();
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
@@ -81,9 +110,14 @@ export default function ProfilePage() {
       <div className="bg-white border border-line p-6 w-full max-w-md">
           
         <div className="flex items-start space-x-5">
-          <div className="w-28 h-28 rounded-full overflow-hidden shrink-0">
-            <img src={profile.avatar_url} alt="pfp" />
-          </div>
+          <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
+            <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
+            <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <Image size={24} />
+                <Plus size={24} />
+              </div>
+          </label>
           <div className="flex flex-col flex-1">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
