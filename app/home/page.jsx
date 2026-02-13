@@ -19,6 +19,7 @@ export default function HomePage() {
   const [postComment, setPostComment] = useState("");
   const [profilesOnPost, setProfilesOnPost] = useState([]); 
   const [loadingComments, setLoadingComments] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(false);
 
   // auth
   useEffect(() => {
@@ -103,6 +104,8 @@ export default function HomePage() {
 
   // handle like
   const toggleLike = async (post) => {
+    setLoadingLike(true);
+
     if (!currentUserId) {
       return;
     }
@@ -146,6 +149,8 @@ export default function HomePage() {
         )
       );
     }
+
+    setLoadingLike(false);
   };
 
   const fetchComments = async (postId) => {
@@ -241,7 +246,11 @@ export default function HomePage() {
                       <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                           <button onClick={() => toggleLike(post)}>
-                            <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
+                            { loadingLike ? (
+                              <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                            ) : (
+                              <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
+                            )}
                           </button>
 
                           <span className="text-sm font-bold text-gray-700">{post.likeCount}</span>
