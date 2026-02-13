@@ -71,15 +71,15 @@ export default function RegisterPage() {
             <h1 className="text-center text-2xl font-bold text-foreground">Register</h1>
 
             <form onSubmit={handleRegister} className="space-y-4 text-foreground">
-              <input type="text" placeholder="Username" required value={username} onChange={(e) => setUsername(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:ring-2 focus:ring-pink-500"/>
-              <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:ring-2 focus:ring-pink-500"/>
-              <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:ring-2 focus:ring-pink-500"/>
-              <button type="submit" disabled={loading} className="w-full rounded-md bg-pink-500 p-3 font-semibold text-white hover:bg-pink-600 cursor-pointer transition">{loading ? "Loading..." : "Register"}</button>
+              <input type="text" placeholder="Username" required value={username} onChange={(e) => setUsername(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+              <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+              <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+              <button type="submit" disabled={loading} className="w-full rounded-md p-3 font-semibold text-white bg-black hover:bg-zinc-800 cursor-pointer transition">{loading ? "Loading..." : "Register"}</button>
             </form>
 
             <p className="text-center text-sm text-lightforeground">
               Already have an account?{" "}
-              <a href="/login" className="text-pink-500 hover:underline">Login</a>
+              <a href="/login" className="text-zinc-800 hover:underline">Login</a>
             </p>
             
             {message ? ( <p className="text-center text-sm text-red-500">{message}</p> ) : null}
