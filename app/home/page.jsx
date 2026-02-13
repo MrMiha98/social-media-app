@@ -222,7 +222,7 @@ export default function HomePage() {
       ) : (
         <>
           { fetchingPosts ? (
-            <p>Loading posts...</p>
+            <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
           ) : fetchError ? (
             <p className="text-red-500">Error fetching posts: {fetchError}</p>
           ) : posts.length === 0 ? (
@@ -262,7 +262,7 @@ export default function HomePage() {
                         <>
                           <div className="w-full max-h-64 overflow-auto overflow-x-hidden p-4">
                             { loadingComments ? (
-                              <p>loading...</p>
+                              <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
                             ) : comments.length > 0 ? (
                               comments.map((comment) => (
                                 <div key={comment.id} className="flex items-start space-x-2">

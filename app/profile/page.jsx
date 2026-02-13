@@ -99,7 +99,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
-        Loading profile...
+        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
       </div>
     );
   }
