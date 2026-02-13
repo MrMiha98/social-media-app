@@ -283,7 +283,7 @@ export default function HomePage() {
                                 </div>
                               ))
                             ) : (
-                              <p>no comments yet</p>
+                              <p className="font-semibold text-xs">No comments yet.</p>
                             )}
                           </div>
                           <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex items-center space-x-2">
