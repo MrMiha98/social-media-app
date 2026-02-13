@@ -223,11 +223,13 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
       { loading ? (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">Checking authentication...</div>
+        <div className="min-h-screen flex items-center justify-center bg-background text-gray-900">Checking authentication...</div>
       ) : (
         <>
           { fetchingPosts ? (
-            <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+            <div className="min-h-screen flex items-center justify-center bg-background text-gray-900">
+              <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+            </div>
           ) : fetchError ? (
             <p className="text-red-500">Error fetching posts: {fetchError}</p>
           ) : posts.length === 0 ? (
