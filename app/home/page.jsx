@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase";
 import { Heart, MessageCircle, Upload } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
+import { comment } from "postcss";
 
 export default function HomePage() {
   const router = useRouter();
@@ -14,6 +15,10 @@ export default function HomePage() {
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [fetchError, setFetchError] = useState("");
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [openComments, setOpenComments] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [postComment, setPostComment] = useState("");
+  const [profilesOnPost, setProfilesOnPost] = useState([]); 
 
   // auth
   useEffect(() => {
@@ -143,6 +148,69 @@ export default function HomePage() {
     }
   };
 
+  const fetchComments = async (postId) => {
+    const { data: comments, error: commentsError } = await supabase
+      .from("comments")
+      .select("id, content, user_id")
+      .eq("post_id", postId)
+
+    if (commentsError) {
+      console.log(commentsError);
+      return;
+    }
+
+    const { data: profilesData, error: profilesError } = await supabase
+      .from("profiles")
+      .select("id, username, avatar_url")
+
+    if (profilesError) {
+      console.log(profilesError);
+      return;
+    }
+
+    setProfilesOnPost(profilesData);
+
+    const commentsData = comments.map((comment) => {
+      return {
+        ...comment,
+
+        username: profilesData.find((profile) =>
+              profile.id === comment.user_id
+        )?.username,
+        avatar_url: profilesData.find((profile) =>
+              profile.id === comment.user_id
+        )?.avatar_url
+      }
+    })
+
+    setComments(commentsData);
+  };
+
+  const handleCommentPost = async (e, postId) => {
+    e.preventDefault();
+
+    const { data: newComment, error } = await supabase
+      .from("comments")
+      .insert({ post_id: postId, user_id: currentUserId, content: postComment })
+      .select()
+      .single()
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    const enrichedComment = {
+      ...newComment,
+      username: profilesOnPost.find((p) => p.id === newComment.user_id)?.username,
+      avatar_url: profilesOnPost.find((p) => p.id === newComment.user_id)?.avatar_url,
+    };
+
+    setComments((prevComments) => [...prevComments, enrichedComment]);
+
+    setPostComment("");
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
       { loading ? (
@@ -174,11 +242,41 @@ export default function HomePage() {
 
                           <span className="text-sm font-bold text-gray-700">{post.likeCount}</span>
 
-                          <MessageCircle size={24} className="cursor-pointer text-lightforeground hover:text-pink-500 ml-2"/>
+                          <MessageCircle size={24} className="cursor-pointer text-lightforeground hover:text-pink-500 ml-2" onClick={() => {
+                            if (openComments === post.id) {
+                              setOpenComments(null);
+                            } else {
+                              setOpenComments(post.id);
+                              fetchComments(post.id);
+                            }}}/>
                         </div>
 
                         <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
                       </div>
+
+                      { openComments === post.id && (
+                        <>
+                          <div className="w-full max-h-64 overflow-auto overflow-x-hidden p-4">
+                            { comments.length > 0 ? (
+                              comments.map((comment) => (
+                                <div key={comment.id} className="flex items-start space-x-2">
+                                  <img src={comment.avatar_url} className="w-6 h-6 object-cover object-top-right rounded-full"/>
+                                  <div>
+                                    <span className="font-semibold text-xs">{comment.username}</span>
+                                    <p className="text-sm">{comment.content}</p>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <p>no comments yet</p>
+                            )}
+                          </div>
+                          <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex items-center space-x-2">
+                            <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="flex-1 px-3 py-2 text-sm border border-line rounded-full focus:border-transparent outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+                            <button type="submit" className="px-4 py-2 text-sm font-semibold bg-black text-white rounded-full hover:bg-zinc-800 cursor-pointer transition active:scale-95">Send</button>
+                          </form>
+                        </>
+                      )}
 
                       <p className="mt-2 text-sm text-gray-800">{post.caption}</p>
                     </div>
