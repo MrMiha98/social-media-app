@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase";
 import { Heart, MessageCircle, Upload } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
-import { comment } from "postcss";
 
 export default function HomePage() {
   const router = useRouter();
@@ -19,6 +18,7 @@ export default function HomePage() {
   const [comments, setComments] = useState([]);
   const [postComment, setPostComment] = useState("");
   const [profilesOnPost, setProfilesOnPost] = useState([]); 
+  const [loadingComments, setLoadingComments] = useState(false);
 
   // auth
   useEffect(() => {
@@ -149,6 +149,9 @@ export default function HomePage() {
   };
 
   const fetchComments = async (postId) => {
+    setLoadingComments(true);
+    setComments([]);
+
     const { data: comments, error: commentsError } = await supabase
       .from("comments")
       .select("id, content, user_id")
@@ -184,6 +187,7 @@ export default function HomePage() {
     })
 
     setComments(commentsData);
+    setLoadingComments(false);
   };
 
   const handleCommentPost = async (e, postId) => {
@@ -257,7 +261,9 @@ export default function HomePage() {
                       { openComments === post.id && (
                         <>
                           <div className="w-full max-h-64 overflow-auto overflow-x-hidden p-4">
-                            { comments.length > 0 ? (
+                            { loadingComments ? (
+                              <p>loading...</p>
+                            ) : comments.length > 0 ? (
                               comments.map((comment) => (
                                 <div key={comment.id} className="flex items-start space-x-2">
                                   <img src={comment.avatar_url} className="w-6 h-6 object-cover object-top-right rounded-full"/>
