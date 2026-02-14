@@ -1,57 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import supabase from '@/lib/supabase';
+import { Image, Plus } from 'lucide-react';
 import { useRouter } from "next/navigation";
-import supabase from "@/lib/supabase";
-import Sidebar from "@/components/Sidebar";
-import { Image, Plus } from "lucide-react";
 
-export default function ProfilePage() {
+export default function ProfileClient({ profile, posts }) {
   const router = useRouter();
 
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [bioInput, setBioInput] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [bioInput, setBioInput] = useState(profile.bio || '');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfileAndPosts = async () => {
-      setLoading(true);
-
+    const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user) {
-        setLoading(false);
-        return;
-      } else {
-        setUser(user);
-      }
-
-      const { data: profileInfo } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (profileInfo) {
-        setProfile(profileInfo || "");
-        setBioInput(profileInfo.bio || "");
-      }
-
-      const { data: userPosts } = await supabase
-        .from("posts")
-        .select("id, image_url")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      setPosts(userPosts || []);
+      setUser(user);
       setLoading(false);
     };
 
-    fetchProfileAndPosts();
+    checkUser();
   }, []);
+
+  const isCurrentUser = user?.id === profile.id;
 
   const handleSaveBio = async () => {
     await supabase
@@ -59,13 +32,8 @@ export default function ProfilePage() {
       .update({ bio: bioInput })
       .eq("id", user.id);
 
-    setProfile((prev) => ({ ...prev, bio: bioInput }));
     setEditing(false);
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
+    location.reload();
   };
 
   const handleAvatarUpload = async (e) => {
@@ -73,10 +41,10 @@ export default function ProfilePage() {
     const fileExt = file.name.split('.').pop();
     const fileName = `${user.id}.${fileExt}`;
 
-   const { error: uploadError } = await supabase
-    .storage
-    .from("avatars")
-    .update(fileName, file, { upsert: true })
+    const { error: uploadError } = await supabase
+      .storage
+      .from("avatars")
+      .update(fileName, file, { upsert: true })
 
     if (uploadError) {
       console.log(uploadError);
@@ -96,20 +64,24 @@ export default function ProfilePage() {
     location.reload();
   }
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
+      <div className="min-h-screen flex items-center justify-center bg-background absolute inset-0">
         <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background">
-      <Sidebar />
-      <div className="bg-white border border-line p-6 w-full max-w-md">
+    <div className="bg-white border border-line p-6 w-full max-w-md">
           
-        <div className="flex items-start space-x-5">
+      <div className="flex items-start space-x-5">
+        { isCurrentUser ? (
           <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
             <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
             <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
@@ -118,12 +90,22 @@ export default function ProfilePage() {
                 <Plus size={24} />
               </div>
           </label>
-          <div className="flex flex-col flex-1">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
+        ) : (
+          <div className="w-28 h-28 rounded-full overflow-hidden">
+            <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
+          </div>
+        )}
+        <div className="flex flex-col flex-1">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
+            { isCurrentUser && (
               <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-red-500 transition cursor-pointer">Log out</button>
-            </div>
+            )}
+          </div>
+          { isCurrentUser && (
             <p className="text-gray-500 text-sm">{user.email}</p>
+          )}
+          { isCurrentUser ? (
             <div className="mt-3">
               { editing ? (
                 <div className="flex space-x-2">
@@ -137,20 +119,26 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-1 mt-4">
-          { posts.length === 0 ? (
-            <p className="col-span-3 text-center text-gray-400 py-6">No posts yet</p>
           ) : (
-            posts.map((post) => (
-              <div key={post.id} className="aspect-square overflow-hidden rounded-sm">
-                <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
+            <div className="mt-3">
+              <div className="flex justify-between items-start gap-3">
+                <p className="text-gray-800 text-sm">{profile.bio || "No bio yet"}</p>
               </div>
-            ))
+            </div>
           )}
         </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-1 mt-4">
+        { posts.length === 0 ? (
+          <p className="col-span-3 text-center text-gray-400 py-6">No posts yet</p>
+        ) : (
+          posts.map((post) => (
+            <div key={post.id} className="aspect-square overflow-hidden rounded-sm">
+              <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

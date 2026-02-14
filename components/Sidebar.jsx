@@ -2,21 +2,33 @@
 
 import { House, Upload, User } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import supabase from "@/lib/supabase";
 
 export default function Sidebar() {
   const router = useRouter(); // spremeni url
   const pathname = usePathname(); // prebere url
+  const [username, setUsername] = useState("");
 
-  const [uploadModalToggle, setUploadModalToggle] = useState(false);
+  useEffect(() => {
+    const goToProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
 
-    const handleUploadModalToggle = () => {
-    if (uploadModalToggle) {
-      setUploadModalToggle(false);
-    } else {
-      setUploadModalToggle(true);
-    }
-  };
+      if (!user) {
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", user.id)
+        .single();
+
+      setUsername(profile.username)
+    };
+
+    goToProfile();
+  }, []);
 
   return (
     <>
@@ -31,7 +43,7 @@ export default function Sidebar() {
           <span className="text-sm">Upload</span>
         </button>
 
-        <button onClick={() => router.push("/profile")} className={`mr-2 flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/profile" ? "bg-gray-100" : "hover:bg-gray-100"} cursor-pointer`}>
+        <button onClick={() => router.push(`/user/${username}`)} className={`mr-2 flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === `/user/${username}` ? "bg-gray-100" : "hover:bg-gray-100"} cursor-pointer`}>
           <User size={20} />
           <span className="text-sm">Profile</span>
         </button>
@@ -46,7 +58,7 @@ export default function Sidebar() {
           <Upload size={24} />
         </button>
 
-        <button onClick={() => router.push("/profile")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/profile" ? "bg-gray-100" : "hover:bg-gray-100" } cursor-pointer`}>
+        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === `/user/${username}` ? "bg-gray-100" : "hover:bg-gray-100" } cursor-pointer`}>
           <User size={24} />
         </button>
       </nav>
