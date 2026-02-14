@@ -15,6 +15,7 @@ export default function HomePage() {
   const [fetchError, setFetchError] = useState("");
   const [currentUserId, setCurrentUserId] = useState(null);
   const [openComments, setOpenComments] = useState(null);
+  const [openLike, setOpenLike] = useState(null);
   const [comments, setComments] = useState([]);
   const [postComment, setPostComment] = useState("");
   const [profilesOnPost, setProfilesOnPost] = useState([]); 
@@ -59,7 +60,7 @@ export default function HomePage() {
 
         const { data: profiles, error: profilesError } = await supabase
           .from("profiles")
-          .select("id, username");
+          .select("id, username, avatar_url");
 
         if (profilesError) {
           setFetchError(profilesError.message);
@@ -89,6 +90,10 @@ export default function HomePage() {
               post.user_id === profile.id
             )?.username,
 
+            avatar_url: profiles.find((profile) =>
+              post.user_id === profile.id
+            )?.avatar_url,
+
             likeCount: likes.filter((like) =>
               like.post_id === post.id
             ).length,
@@ -116,6 +121,7 @@ export default function HomePage() {
 
   // handle like
   const toggleLike = async (post) => {
+    setOpenLike(post.id);
     setLoadingLike(true);
 
     if (!currentUserId) {
@@ -162,6 +168,7 @@ export default function HomePage() {
       );
     }
 
+    setOpenLike(null);
     setLoadingLike(false);
   };
 
@@ -253,7 +260,10 @@ export default function HomePage() {
           <div className="flex flex-col space-y-4 mb-14 md:mb-0">
             { posts.map((post) => (
               <div key={post.id} className="border border-line w-full max-w-md bg-white">
-                <div className="px-4 py-3 font-semibold text-sm">{post.username}</div>
+                <a href={`/${post.username}`} className="flex flex-row items-center space-x-2 px-1 hover:underline w-fit">
+                  <img className="w-6 h-6 object-cover object-top-right rounded-full" src={post.avatar_url} alt="user avatar"/>
+                  <div className="py-3 font-semibold text-sm">{post.username}</div>
+                </a>
 
                 <img src={post.image_url} alt={post.caption} className="w-full object-cover"/>
 
@@ -261,7 +271,7 @@ export default function HomePage() {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-2">
                       <button onClick={() => toggleLike(post)}>
-                        { loadingLike ? (
+                        { loadingLike && openLike === post.id ? (
                           <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
                         ) : (
                           <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
