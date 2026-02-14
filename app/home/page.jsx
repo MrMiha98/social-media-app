@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase";
-import { Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle, SendHorizonal } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 
@@ -240,6 +240,14 @@ export default function HomePage() {
     setPostComment("");
   };
 
+  const handleCopyLink = async (postId) => {
+    const url = "http://localhost:3000/post/" + postId;
+
+    await navigator.clipboard.writeText(url);
+
+    alert("Link copied to clipboard!");
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
       { loading ? (
@@ -289,6 +297,7 @@ export default function HomePage() {
                           fetchComments(post.id);
                         }}}/>
                       <span className="text-sm font-bold text-gray-700">{post.commentCount}</span>
+                      <SendHorizonal size={24} onClick={() => handleCopyLink(post.id)} className="cursor-pointer text-lightforeground hover:text-black transition ml-2" />
                     </div>
 
                     <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
