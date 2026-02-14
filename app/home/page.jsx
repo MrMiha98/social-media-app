@@ -224,84 +224,83 @@ export default function HomePage() {
     <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
       { loading ? (
         <div className="min-h-screen flex items-center justify-center bg-background text-gray-900">Checking authentication...</div>
+      ) : fetchingPosts ? (
+        <div className="min-h-screen flex items-center justify-center bg-background text-gray-900">
+          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+        </div>
+      ) : fetchError ? (
+        <p className="text-red-500">Error fetching posts: {fetchError}</p>
+      ) : posts.length === 0 ? (
+        <>
+          <Sidebar />
+          <p className="text-gray-400 max-w-md w-full text-center">No posts yet.</p>
+        </>
       ) : (
         <>
-          { fetchingPosts ? (
-            <div className="min-h-screen flex items-center justify-center bg-background text-gray-900">
-              <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-            </div>
-          ) : fetchError ? (
-            <p className="text-red-500">Error fetching posts: {fetchError}</p>
-          ) : posts.length === 0 ? (
-            <p className="text-gray-400">No posts yet.</p>
-          ) : (
-            <>
-              <Sidebar />
-              <div className="flex flex-col space-y-4 mb-14 md:mb-0">
-                { posts.map((post) => (
-                  <div key={post.id} className="border border-line w-full max-w-md bg-white">
-                    <div className="px-4 py-3 font-semibold text-sm">{post.username}</div>
+          <Sidebar />
+          <div className="flex flex-col space-y-4 mb-14 md:mb-0">
+            { posts.map((post) => (
+              <div key={post.id} className="border border-line w-full max-w-md bg-white">
+                <div className="px-4 py-3 font-semibold text-sm">{post.username}</div>
 
-                    <img src={post.image_url} alt={post.caption} className="w-full object-cover"/>
+                <img src={post.image_url} alt={post.caption} className="w-full object-cover"/>
 
-                    <div className="px-4 py-3">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center space-x-2">
-                          <button onClick={() => toggleLike(post)}>
-                            { loadingLike ? (
-                              <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-                            ) : (
-                              <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
-                            )}
-                          </button>
+                <div className="px-4 py-3">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                      <button onClick={() => toggleLike(post)}>
+                        { loadingLike ? (
+                          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                        ) : (
+                          <Heart size={24} className={`transition cursor-pointer ${ post.hasLiked ? "fill-red-500 text-red-500" : "text-lightforeground hover:text-red-500" }`}/>
+                        )}
+                      </button>
 
-                          <span className="text-sm font-bold text-gray-700">{post.likeCount}</span>
+                      <span className="text-sm font-bold text-gray-700">{post.likeCount}</span>
 
-                          <MessageCircle size={24} className="cursor-pointer text-lightforeground hover:text-pink-500 ml-2" onClick={() => {
-                            if (openComments === post.id) {
-                              setOpenComments(null);
-                            } else {
-                              setOpenComments(post.id);
-                              fetchComments(post.id);
-                            }}}/>
-                        </div>
-
-                        <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
-                      </div>
-
-                      { openComments === post.id && (
-                        <>
-                          <div className="w-full max-h-64 overflow-auto overflow-x-hidden p-4">
-                            { loadingComments ? (
-                              <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-                            ) : comments.length > 0 ? (
-                              comments.map((comment) => (
-                                <div key={comment.id} className="flex items-start space-x-2">
-                                  <img src={comment.avatar_url} className="w-6 h-6 object-cover object-top-right rounded-full"/>
-                                  <div>
-                                    <span className="font-semibold text-xs">{comment.username}</span>
-                                    <p className="text-sm">{comment.content}</p>
-                                  </div>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="font-semibold text-xs">No comments yet.</p>
-                            )}
-                          </div>
-                          <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex items-center space-x-2">
-                            <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="flex-1 px-3 py-2 text-sm border border-line rounded-full focus:border-transparent outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
-                            <button type="submit" className="px-4 py-2 text-sm font-semibold bg-black text-white rounded-full hover:bg-zinc-800 cursor-pointer transition active:scale-95">Send</button>
-                          </form>
-                        </>
-                      )}
-
-                      <p className="mt-2 text-sm text-gray-800">{post.caption}</p>
+                      <MessageCircle size={24} className="cursor-pointer text-lightforeground hover:text-pink-500 ml-2" onClick={() => {
+                        if (openComments === post.id) {
+                          setOpenComments(null);
+                        } else {
+                          setOpenComments(post.id);
+                          fetchComments(post.id);
+                        }}}/>
                     </div>
+
+                    <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
                   </div>
-                ))}
+
+                  { openComments === post.id && (
+                    <>
+                      <div className="w-full max-h-64 overflow-auto overflow-x-hidden p-4">
+                        { loadingComments ? (
+                          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                        ) : comments.length > 0 ? (
+                          comments.map((comment) => (
+                            <div key={comment.id} className="flex items-start space-x-2">
+                              <img src={comment.avatar_url} className="w-6 h-6 object-cover object-top-right rounded-full"/>
+                              <div>
+                                <span className="font-semibold text-xs">{comment.username}</span>
+                                <p className="text-sm">{comment.content}</p>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="font-semibold text-xs">No comments yet.</p>
+                        )}
+                      </div>
+                      <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex items-center space-x-2">
+                        <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="flex-1 px-3 py-2 text-sm border border-line rounded-full focus:border-transparent outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+                        <button type="submit" className="px-4 py-2 text-sm font-semibold bg-black text-white rounded-full hover:bg-zinc-800 cursor-pointer transition active:scale-95">Send</button>
+                      </form>
+                    </>
+                  )}
+
+                  <p className="mt-2 text-sm text-gray-800">{post.caption}</p>
+                </div>
               </div>
-            </>
-          )}
+            ))}
+          </div>
         </>
       )}
     </div>
