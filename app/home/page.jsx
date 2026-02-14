@@ -72,8 +72,16 @@ export default function HomePage() {
         if (likesError) {
           setFetchError(likesError.message);
         }
+
+        const { data: comments, error: commentsError } = await supabase
+          .from("comments")
+          .select("post_id")
+
+        if (commentsError) {
+          setFetchError(commentsError.message);
+        }
         
-        const postsWithLikeData = posts.map((post) => {
+        const postsWithLikeAndCommentData = posts.map((post) => {
           return {
             ...post,
 
@@ -87,11 +95,15 @@ export default function HomePage() {
             
             hasLiked: likes.some((like) => 
               like.user_id === currentUserId && like.post_id === post.id
-            )
+            ),
+
+            commentCount: comments.filter((comment) => 
+              comment.post_id === post.id
+            ).length
           };
         });
 
-        setPosts(postsWithLikeData);
+        setPosts(postsWithLikeAndCommentData);
       } catch (err) {
         setFetchError(err.message);
       } finally {
@@ -265,6 +277,7 @@ export default function HomePage() {
                           setOpenComments(post.id);
                           fetchComments(post.id);
                         }}}/>
+                      <span className="text-sm font-bold text-gray-700">{post.commentCount}</span>
                     </div>
 
                     <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
