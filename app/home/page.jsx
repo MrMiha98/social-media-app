@@ -260,7 +260,7 @@ export default function HomePage() {
           <div className="flex flex-col space-y-4 mb-14 md:mb-0">
             { posts.map((post) => (
               <div key={post.id} className="border border-line w-full max-w-md bg-white">
-                <a href={`/${post.username}`} className="flex flex-row items-center space-x-2 px-1 hover:underline w-fit">
+                <a href={`/${post.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline w-fit">
                   <img className="w-6 h-6 object-cover object-top-right rounded-full" src={post.avatar_url} alt="user avatar"/>
                   <div className="py-3 font-semibold text-sm">{post.username}</div>
                 </a>
