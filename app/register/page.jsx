@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import supabase from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import postcss from "postcss";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function RegisterPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background">
       {loadingAuth ? (
-        <div className="text-foreground">Loading...</div>
+        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
       ) : (
           <div className="w-full max-w-sm space-y-6 rounded-2xl bg-white border border-line p-8">
             <h1 className="text-center text-2xl font-bold text-foreground">Register</h1>
