@@ -9,17 +9,24 @@ import { useRouter } from "next/navigation";
 export default function UploadPage() {
   const router = useRouter();
 
+  // hold the file and caption text for the post about to be created
   const [imageFile, setImageFile] = useState(null);
   const [caption, setCaption] = useState("");
+
+  // loading animations
   const [loading, setLoading] = useState(false);
+
+  // hold potential errors
   const [message, setMessage] = useState("");
 
+  // handle the file select
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
       setImageFile(e.target.files[0]);
     }
   };
 
+  // handle post upload
   const handleUpload = async (e) => {
     e.preventDefault();
 

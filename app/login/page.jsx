@@ -7,12 +7,18 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const router = useRouter();
   
+  // hold email and password values from the inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // loading animations
   const [loading, setLoading] = useState(false);
   const [loadingAuth,setLoadingAuth] = useState(true);
+
+  // hold potential errors
   const [message, setMessage] = useState("");
 
+  // check if a user is logged in already, if yes, then redirect to /home
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -28,6 +34,7 @@ export default function LoginPage() {
     checkUser();
   }, []);
 
+  // handle loggin in
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);

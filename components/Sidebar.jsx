@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 import supabase from "@/lib/supabase";
 
 export default function Sidebar() {
-  const router = useRouter(); // spremeni url
-  const pathname = usePathname(); // prebere url
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // hold the currently logged in users username
   const [username, setUsername] = useState("");
 
+  // retrieve the currently logged in users username
   useEffect(() => {
     const goToProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
