@@ -2,8 +2,10 @@ import supabase from "@/lib/supabase";
 import PostClient from "./PostClient";
 
 export default async function PostPage({ params }) {
+  // get the dynamic postId url
   const { postId } = await params;
 
+  // get all the data for this specific post
   const { data: post } = await supabase
     .from("posts")
     .select("*")
@@ -16,6 +18,7 @@ export default async function PostPage({ params }) {
     );
   }
 
+  // get the data of the posts user
   const { data: profile } = await supabase
     .from("profiles")
     .select("id, username, avatar_url")
@@ -28,16 +31,20 @@ export default async function PostPage({ params }) {
     );
   }
 
+  // get all the likes for this post
   const { data: likes } = await supabase
     .from("likes")
     .select("*")
     .eq("post_id", post.id);
 
+  // get all the comments for this post
   const { data: comments } = await supabase
     .from("comments")
     .select("*")
     .eq("post_id", post.id);
 
+
+  // enrich the final post data
   const enrichedPost = {
     ...post,
     likeCount: likes.length,
