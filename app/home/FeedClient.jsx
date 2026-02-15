@@ -194,7 +194,7 @@ export default function FeedClient({ initialPosts, likes }) {
       <Sidebar />
       <div className={`flex flex-col space-y-4 ${!posts.length && "max-w-md w-full justify-center items-center"} mb-14 md:mb-0`}>
         {!posts.length && (
-          <p className="text-gray-700">No posts yet</p>
+          <p className="text-gray-700">No posts yet.</p>
         )}
         {posts.map((post) => (
           <div key={post.id} className="border border-line w-full max-w-md bg-white">

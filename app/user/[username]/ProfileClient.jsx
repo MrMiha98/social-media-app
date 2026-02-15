@@ -8,17 +8,21 @@ import { useRouter } from "next/navigation";
 export default function ProfileClient({ profile, posts }) {
   const router = useRouter();
 
+  // hold the currently logged in user
   const [user, setUser] = useState(null);
-  const [editing, setEditing] = useState(false);
-  const [bioInput, setBioInput] = useState(profile.bio || '');
-  const [loading, setLoading] = useState(true);
 
+  // status
+  const [editing, setEditing] = useState(false);
+
+  // hold the bio input text if the user is on his own profile
+  const [bioInput, setBioInput] = useState(profile.bio || '');
+
+  // get the currently logged in user
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
 
       setUser(user);
-      setLoading(false);
     };
 
     checkUser();
@@ -26,6 +30,7 @@ export default function ProfileClient({ profile, posts }) {
 
   const isCurrentUser = user?.id === profile.id;
 
+  // handle bio change
   const handleSaveBio = async () => {
     await supabase
       .from("profiles")
@@ -36,6 +41,7 @@ export default function ProfileClient({ profile, posts }) {
     location.reload();
   };
 
+  // handle uploading of a new avatar
   const handleAvatarUpload = async (e) => {
     const file = e.target.files[0];
     const fileExt = file.name.split('.').pop();
@@ -64,24 +70,17 @@ export default function ProfileClient({ profile, posts }) {
     location.reload();
   }
 
+  // handle logging out
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/login");
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background absolute inset-0">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white border border-line p-6 w-full max-w-md">
           
       <div className="flex items-start space-x-5">
-        { isCurrentUser ? (
+        {isCurrentUser ? (
           <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
             <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
             <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
@@ -98,16 +97,16 @@ export default function ProfileClient({ profile, posts }) {
         <div className="flex flex-col flex-1">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
-            { isCurrentUser && (
+            {isCurrentUser && (
               <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-red-500 transition cursor-pointer">Log out</button>
             )}
           </div>
-          { isCurrentUser && (
+          {isCurrentUser && (
             <p className="text-gray-500 text-sm">{user.email}</p>
           )}
-          { isCurrentUser ? (
+          {isCurrentUser ? (
             <div className="mt-3">
-              { editing ? (
+              {editing ? (
                 <div className="flex space-x-2">
                   <input type="text" value={bioInput} onChange={(e) => setBioInput(e.target.value)} className="flex-1 p-2 rounded-md border border-line focus:ring-1 focus:ring-black/10 text-black outline-none text-sm"/>
                   <button onClick={handleSaveBio} className="px-3 py-2 text-white rounded-md bg-black hover:bg-zinc-800 text-sm cursor-pointer">Save</button>
