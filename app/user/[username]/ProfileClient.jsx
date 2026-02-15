@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import supabase from '@/lib/supabase';
 import { Image, Plus } from 'lucide-react';
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 export default function ProfileClient({ profile, posts }) {
   const router = useRouter();
@@ -129,13 +130,15 @@ export default function ProfileClient({ profile, posts }) {
       </div>
 
       <div className="grid grid-cols-3 gap-1 mt-4">
-        { posts.length === 0 ? (
+        {posts.length === 0 ? (
           <p className="col-span-3 text-center text-gray-400 py-6">No posts yet</p>
         ) : (
           posts.map((post) => (
-            <div key={post.id} className="aspect-square overflow-hidden rounded-sm">
-              <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
-            </div>
+            <Link href={`/post/${post.id}`}>
+              <div key={post.id} className="aspect-square overflow-hidden rounded-sm cursor-pointer">
+                <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
+              </div>
+            </Link>
           ))
         )}
       </div>
