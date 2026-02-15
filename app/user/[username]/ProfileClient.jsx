@@ -134,8 +134,8 @@ export default function ProfileClient({ profile, posts }) {
           <p className="col-span-3 text-center text-gray-400 py-6">No posts yet</p>
         ) : (
           posts.map((post) => (
-            <Link href={`/post/${post.id}`}>
-              <div key={post.id} className="aspect-square overflow-hidden rounded-sm cursor-pointer">
+            <Link key={post.id} href={`/post/${post.id}`}>
+              <div className="aspect-square overflow-hidden rounded-sm cursor-pointer">
                 <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
               </div>
             </Link>
