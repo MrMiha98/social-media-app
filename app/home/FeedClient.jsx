@@ -364,35 +364,35 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
         ))}
       </div>
       {isStoryViewerOpen && (
-        <div className="fixed inset-0 w-full h-full flex items-center justify-center p-4 bg-black/50 backdrop-blur-md">
+        <div className="h-screen absolute inset-0 flex flex-col">
           {loadingStories ? (
-            <div className="min-h-screen w-full flex items-center justify-center">
+            <div className="min-h-screen w-full flex items-center justify-center bg-background">
               <div className="w-6 h-6 border-2 border-gray-100 border-t-gray-900 rounded-full animate-spin"></div>
             </div>
           ) : (
             <>
-              <div className="w-full max-w-md flex flex-col bg-white rounded-md overflow-hidden">
-                <div className="w-full flex items-center p-2 space-x-2">
+              <div className="w-full flex justify-between items-center bg-white">
+                <div className="w-fit flex items-center p-2 space-x-2">
                   <img src={selectedStoryUser.avatar_url} className="h-6 w-6 rounded-full object-cover object-top-right"/>
                   <span className="font-semibold text-sm">{selectedStoryUser.username}</span>
                 </div>
-                <div className="flex space-x-1 px-2 pb-2">
-                  {selectedUserStories.map((_, index) => (
-                    <div key={index} className={`flex-1 h-1 rounded-full ${
-                      index <= currentStoryIndex
-                        ? "bg-black"
-                        : "bg-gray-200"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <div className="w-full relative select-none">
-                  <ChevronLeft size={24} className="absolute left-0 top-1/2 cursor-pointer bg-transparent backdrop-blur-lg h-18 w-10 rounded-r-lg active:scale-105 transition" color="white" onClick={goToPreviousStory}/>
-                  <img src={selectedUserStories[currentStoryIndex].image_url} className="w-full object-contain" alt="story"/>
-                  <ChevronRight size={24} className="absolute right-0 top-1/2 cursor-pointer bg-transparent backdrop-blur-lg h-18 w-10 rounded-l-lg active:scale-105 transition" color="white" onClick={goToNextStory}/>
-                </div>
+                <X className="cursor-pointer mr-2" color="black" strokeWidth={3} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
               </div>
-              <X className="absolute right-4 top-4 cursor-pointer" color="white" strokeWidth={4} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
+              <div className="flex space-x-1 px-2 pb-2 bg-white border-b border-line">
+                {selectedUserStories.map((_, index) => (
+                  <div key={index} className={`flex-1 h-1 rounded-full ${
+                    index <= currentStoryIndex
+                      ? "bg-black"
+                      : "bg-gray-200"
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="h-full w-full flex justify-center items-center relative bg-background overflow-x-hidden select-none">
+                <ChevronLeft size={24} className="absolute left-0 cursor-pointer border border-line h-24 w-12 rounded-r-lg hover:bg-gray-100 transition" color="black" onClick={goToPreviousStory}/>
+                <img src={selectedUserStories[currentStoryIndex].image_url} className="h-full absolute" alt="story"/>
+                <ChevronRight size={24} className="absolute right-0 cursor-pointer border border-line h-24 w-12 rounded-l-lg hover:bg-gray-100 transition" color="black" onClick={goToNextStory}/>
+              </div>
             </>
           )}
         </div>
