@@ -281,7 +281,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-red-500 text-foreground">
+    <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background text-foreground">
       <Sidebar />
       <div className={`flex flex-col space-y-4 ${!posts.length && "w-full max-w-md justify-center items-center"} mb-14 md:mb-0`}>
         {!posts.length && (
