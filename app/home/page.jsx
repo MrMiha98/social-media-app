@@ -1,7 +1,7 @@
+export const dynamic = "force-dynamic";
 import FeedClient from "./FeedClient";
 import supabase from "@/lib/supabase";
 
-export const dynamic = "force-dynamic";
 
 export default async function Page() {
   // fetch all posts
