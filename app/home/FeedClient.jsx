@@ -364,7 +364,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
         ))}
       </div>
       {isStoryViewerOpen && (
-        <div className="h-screen absolute inset-0 flex flex-col">
+        <div className="h-screen fixed inset-0 flex flex-col">
           {loadingStories ? (
             <div className="min-h-screen w-full flex items-center justify-center bg-background">
               <div className="w-6 h-6 border-2 border-gray-100 border-t-gray-900 rounded-full animate-spin"></div>
@@ -376,7 +376,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                   <img src={selectedStoryUser.avatar_url} className="h-6 w-6 rounded-full object-cover object-top-right"/>
                   <span className="font-semibold text-sm">{selectedStoryUser.username}</span>
                 </div>
-                <X className="cursor-pointer mr-2" color="black" strokeWidth={3} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
+                <X className="cursor-pointer mr-2" strokeWidth={3} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
               </div>
               <div className="flex space-x-1 px-2 pb-2 bg-white border-b border-line">
                 {selectedUserStories.map((_, index) => (
@@ -389,9 +389,9 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                 ))}
               </div>
               <div className="h-full w-full flex justify-center items-center relative bg-background overflow-x-hidden select-none">
-                <ChevronLeft size={24} className="absolute left-0 cursor-pointer border border-line h-24 w-12 rounded-r-lg hover:bg-gray-100 transition" color="black" onClick={goToPreviousStory}/>
-                <img src={selectedUserStories[currentStoryIndex].image_url} className="h-full absolute" alt="story"/>
-                <ChevronRight size={24} className="absolute right-0 cursor-pointer border border-line h-24 w-12 rounded-l-lg hover:bg-gray-100 transition" color="black" onClick={goToNextStory}/>
+                <img src={selectedUserStories[currentStoryIndex].image_url} className="h-full w-full object-contain absolute" alt="story"/>
+                <div className="absolute left-0 top-0 w-1/2 h-full" onClick={goToPreviousStory}/>
+                <div className="absolute right-0 top-0 w-1/2 h-full" onClick={goToNextStory}/>
               </div>
             </>
           )}
