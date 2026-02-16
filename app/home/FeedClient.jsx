@@ -284,9 +284,6 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
     <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background text-foreground">
       <Sidebar />
       <div className={`flex flex-col space-y-4 ${!posts.length && "w-full max-w-md justify-center items-center"} mb-14 md:mb-0`}>
-        {!posts.length && (
-          <p className="text-gray-700">No posts yet.</p>
-        )}
         <div ref={ref} className={`sticky top-0 w-full max-w-md flex space-x-1 overflow-hidden bg-white border border-line p-2 overscroll-x-contain rounded-md ${isStickyActive ? "rounded-none" : "rounded-md"}`}>
           {activeStoryProfiles && activeStoryProfiles.length > 0 ? (
             activeStoryProfiles.map((profile) => (
@@ -296,6 +293,9 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
             <p className="text-sm text-gray-500">No active stories.</p>
           )}
         </div>
+        {!posts.length && (
+          <p className="text-gray-700">No posts yet.</p>
+        )}
         {posts.map((post) => (
           <div key={post.id} className="border border-line w-full max-w-md bg-white rounded-md">
             <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline w-fit">
