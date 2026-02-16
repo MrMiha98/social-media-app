@@ -364,7 +364,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
         ))}
       </div>
       {isStoryViewerOpen && (
-        <div className="fixed inset-0 w-full h-full flex items-center justify-center bg-gray-900/10 backdrop-blur-md">
+        <div className="fixed inset-0 w-full h-full flex items-center justify-center p-4 bg-black/50 backdrop-blur-md">
           {loadingStories ? (
             <div className="min-h-screen w-full flex items-center justify-center">
               <div className="w-6 h-6 border-2 border-gray-100 border-t-gray-900 rounded-full animate-spin"></div>
