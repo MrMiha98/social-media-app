@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState, useRef } from "react";
 import supabase from "@/lib/supabase";
 import { Heart, MessageCircle, SendHorizonal, ChevronLeft, ChevronRight, X } from "lucide-react";
