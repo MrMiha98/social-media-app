@@ -1,14 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import supabase from "@/lib/supabase";
-import { Heart, MessageCircle, SendHorizonal } from "lucide-react";
+import { Heart, MessageCircle, SendHorizonal, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function FeedClient({ initialPosts, likes }) {
+export default function FeedClient({ initialPosts, likes, activeStoryProfiles }) {
   const router = useRouter();
+  const ref = useRef(null);
+
+  // hold the sticky status of the stories container
+  const [isStickyActive, setIsStickyActive] = useState(false);
+
+  // prevent vertical scroll when trying to scroll the stories bar
+  useEffect(() => {
+    const el = ref.current;
+
+    const handleWheel = (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ref.current) return;
+
+      const isAtTop = ref.current.getBoundingClientRect().top <= 0;
+
+      setIsStickyActive(prev => {
+        if (prev !== isAtTop) return isAtTop;
+        return prev;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // hold post and current logged in user
   const [posts, setPosts] = useState(initialPosts);
@@ -30,6 +71,13 @@ export default function FeedClient({ initialPosts, likes }) {
   // openning comments and liking loading animation
   const [loadingComments, setLoadingComments] = useState(false);
   const [loadingLike, setLoadingLike] = useState(false);
+
+  // story states
+  const [selectedUserStories, setSelectedUserStories] = useState([]);
+  const [selectedStoryUser, setSelectedStoryUser] = useState(null);
+  const [loadingStories, setLoadingStories] = useState(false);
+  const [isStoryViewerOpen, setIsStoryViewerOpen] = useState(false);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
   // get the current logged in user
   useEffect(() => {
@@ -189,15 +237,67 @@ export default function FeedClient({ initialPosts, likes }) {
     alert("Link copied to clipboard!");
   };
 
+  // fetch the stories of a selected user
+  const fetchStoriesForUser = async (profile) => {
+    setSelectedStoryUser(profile);
+    setLoadingStories(true);
+    setSelectedUserStories([]);
+    setIsStoryViewerOpen(true);
+
+    const now = new Date();
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    const { data, error } = await supabase
+      .from("stories")
+      .select("*")
+      .eq("user_id", profile.id)
+      .gte("created_at", twentyFourHoursAgo.toISOString())
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.log("Error fetching stories:", error);
+      setLoadingStories(false);
+      return;
+    }
+
+    setSelectedUserStories(data);
+    setCurrentStoryIndex(0);
+    setLoadingStories(false);
+  };
+
+  const goToNextStory = () => {
+    if (currentStoryIndex < selectedUserStories.length - 1) {
+      setCurrentStoryIndex((prev) => prev + 1);
+    } else {
+      setIsStoryViewerOpen(false);
+      setSelectedStoryUser(null);
+    }
+  };
+
+  const goToPreviousStory = () => {
+    if (currentStoryIndex > 0) {
+      setCurrentStoryIndex((prev) => prev - 1);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex justify-center items-start p-4 gap-x-2 bg-background text-foreground">
+    <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background text-foreground">
       <Sidebar />
-      <div className={`flex flex-col space-y-4 ${!posts.length && "max-w-md w-full justify-center items-center"} mb-14 md:mb-0`}>
+      <div className={`flex flex-col space-y-4 ${!posts.length && "w-full max-w-md justify-center items-center"} mb-14 md:mb-0`}>
         {!posts.length && (
           <p className="text-gray-700">No posts yet.</p>
         )}
+        <div ref={ref} className={`sticky top-0 w-full max-w-md flex space-x-1 overflow-hidden bg-white border border-line p-2 overscroll-x-contain rounded-md ${isStickyActive ? "rounded-none" : "rounded-md"}`}>
+          {activeStoryProfiles && activeStoryProfiles.length > 0 ? (
+            activeStoryProfiles.map((profile) => (
+              <img key={profile.id} src={`${profile.avatar_url}?t=${Date.now()}`} onClick={() => fetchStoriesForUser(profile)} className="w-10 h-10 shrink-0 rounded-full object-cover object-top-right border-2 border-pink-500 cursor-pointer" alt="story avatar"/>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500">No active stories.</p>
+          )}
+        </div>
         {posts.map((post) => (
-          <div key={post.id} className="border border-line w-full max-w-md bg-white">
+          <div key={post.id} className="border border-line w-full max-w-md bg-white rounded-md">
             <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline w-fit">
               <img className="w-6 h-6 object-cover object-top-right rounded-full" src={`${post.avatar_url}?t=${Date.now()}`} alt="user avatar"/>
               <div className="py-3 font-semibold text-sm">{post.username}</div>
@@ -263,6 +363,40 @@ export default function FeedClient({ initialPosts, likes }) {
           </div>
         ))}
       </div>
+      {isStoryViewerOpen && (
+        <div className="fixed inset-0 w-full h-full flex items-center justify-center bg-gray-900/10 backdrop-blur-md">
+          {loadingStories ? (
+            <div className="min-h-screen w-full flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-gray-100 border-t-gray-900 rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <>
+              <div className="w-full max-w-md flex flex-col bg-white rounded-md overflow-hidden">
+                <div className="w-full flex items-center p-2 space-x-2">
+                  <img src={selectedStoryUser.avatar_url} className="h-6 w-6 rounded-full object-cover object-top-right"/>
+                  <span className="font-semibold text-sm">{selectedStoryUser.username}</span>
+                </div>
+                <div className="flex space-x-1 px-2 pb-2">
+                  {selectedUserStories.map((_, index) => (
+                    <div key={index} className={`flex-1 h-1 rounded-full ${
+                      index <= currentStoryIndex
+                        ? "bg-black"
+                        : "bg-gray-200"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="w-full relative select-none">
+                  <ChevronLeft size={24} className="absolute left-0 top-1/2 cursor-pointer bg-transparent backdrop-blur-lg h-18 w-10 rounded-r-lg active:scale-105 transition" color="white" onClick={goToPreviousStory}/>
+                  <img src={selectedUserStories[currentStoryIndex].image_url} className="w-full object-contain" alt="story"/>
+                  <ChevronRight size={24} className="absolute right-0 top-1/2 cursor-pointer bg-transparent backdrop-blur-lg h-18 w-10 rounded-l-lg active:scale-105 transition" color="white" onClick={goToNextStory}/>
+                </div>
+              </div>
+              <X className="absolute right-4 top-4 cursor-pointer" color="white" strokeWidth={4} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

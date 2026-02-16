@@ -78,7 +78,7 @@ export default function ProfileClient({ profile, posts }) {
   };
 
   return (
-    <div className="bg-white border border-line p-6 w-full max-w-md">
+    <div className="bg-white border border-line p-6 w-full max-w-md rounded-md">
           
       <div className="flex items-start space-x-5">
         {isCurrentUser ? (

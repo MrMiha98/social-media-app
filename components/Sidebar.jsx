@@ -35,18 +35,18 @@ export default function Sidebar() {
 
   return (
     <>
-      <nav className="hidden md:sticky md:top-4 md:flex flex-col gap-y-2 bg-background text-foreground border-r border-line">
-        <button onClick={() => router.push("/home")} className={`mr-2 flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/home" ? "bg-gray-100" : "hover:bg-gray-100" } cursor-pointer`}>
+      <nav className="hidden md:sticky md:top-4 md:flex flex-col gap-y-2 bg-background text-foreground">
+        <button onClick={() => router.push("/home")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/home" ? "bg-gray-100" : "hover:bg-gray-100" } cursor-pointer`}>
           <House size={20} />
           <span className="text-sm">Home</span>
         </button>
 
-        <button onClick={() => router.push("/upload")} className={`mr-2 flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/upload" ? "bg-gray-100" : "hover:bg-gray-100" } cursor-pointer`}>
+        <button onClick={() => router.push("/upload")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/upload" ? "bg-gray-100" : "hover:bg-gray-100" } cursor-pointer`}>
           <Upload size={20} />
           <span className="text-sm">Upload</span>
         </button>
 
-        <button onClick={() => router.push(`/user/${username}`)} className={`mr-2 flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === `/user/${username}` ? "bg-gray-100" : "hover:bg-gray-100"} cursor-pointer`}>
+        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === `/user/${username}` ? "bg-gray-100" : "hover:bg-gray-100"} cursor-pointer`}>
           <User size={20} />
           <span className="text-sm">Profile</span>
         </button>
