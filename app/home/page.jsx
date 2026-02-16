@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+
 import FeedClient from "./FeedClient";
 import supabase from "@/lib/supabase";
 
