@@ -32,6 +32,10 @@ export default async function StoryPage({ params }) {
   }
 
   return (
-    <StoryViewerClient profile={profileData} stories={storiesData}/>
+    !storiesData || storiesData.length === 0 ? (
+      <div className="min-h-screen p-4 flex justify-center bg-background text-gray-500">User doesn't have any active stories.</div>
+    ) : (
+      <StoryViewerClient profile={profileData} stories={storiesData}/>
+    )
   );
 }
