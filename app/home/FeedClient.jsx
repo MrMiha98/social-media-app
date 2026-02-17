@@ -298,7 +298,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
         )}
         {posts.map((post) => (
           <div key={post.id} className="border border-line w-full max-w-md bg-white rounded-md">
-            <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline w-fit">
+            <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline">
               <img className="w-6 h-6 object-cover object-top-right rounded-full" src={`${post.avatar_url}?t=${Date.now()}`} alt="user avatar"/>
               <div className="py-3 font-semibold text-sm">{post.username}</div>
             </Link>
@@ -334,7 +334,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
 
               {openComments === post.id && (
                 <>
-                  <div className="w-full max-h-64 overflow-auto overflow-x-hidden p-4">
+                  <div className="w-full max-h-64 overflow-auto overflow-x-hidden px-2 py-4 space-y-1">
                     {loadingComments ? (
                       <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
                     ) : comments.length > 0 ? (
@@ -358,7 +358,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                 </>
               )}
 
-              <p className="mt-2 text-sm text-gray-800">{post.caption}</p>
+              <p className="mt-4 text-sm text-gray-800">{post.caption}</p>
             </div>
           </div>
         ))}
@@ -371,22 +371,28 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
             </div>
           ) : (
             <>
-              <div className="w-full flex justify-between items-center bg-white">
-                <div className="w-fit flex items-center p-2 space-x-2">
-                  <img src={selectedStoryUser.avatar_url} className="h-6 w-6 rounded-full object-cover object-top-right"/>
-                  <span className="font-semibold text-sm">{selectedStoryUser.username}</span>
+              <div className="w-full flex flex-row justify-center items-center bg-white">
+                <div className="flex-1">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="w-fit flex items-center p-2 space-x-2">
+                      <img src={selectedStoryUser.avatar_url} className="h-6 w-6 rounded-full object-cover object-top-right"/>
+                      <span className="font-semibold text-sm">{selectedStoryUser.username}</span>
+                    </div>
+                  </div>
+                  <div className="flex space-x-1 px-2 pb-2  border-b border-line">
+                    {selectedUserStories.map((_, index) => (
+                      <div key={index} className={`flex-1 h-1 rounded-full ${
+                        index <= currentStoryIndex
+                          ? "bg-gray-400"
+                          : "bg-gray-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <X className="cursor-pointer mr-2" strokeWidth={3} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
-              </div>
-              <div className="flex space-x-1 px-2 pb-2 bg-white border-b border-line">
-                {selectedUserStories.map((_, index) => (
-                  <div key={index} className={`flex-1 h-1 rounded-full ${
-                    index <= currentStoryIndex
-                      ? "bg-black"
-                      : "bg-gray-200"
-                    }`}
-                  />
-                ))}
+                <div className="h-full aspect-square flex justify-center items-center border-b border-line cursor-pointer">
+                  <X size={32} strokeWidth={2} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
+                </div>
               </div>
               <div className="h-full w-full flex justify-center items-center relative bg-background overflow-x-hidden select-none">
                 <img src={selectedUserStories[currentStoryIndex].image_url} className="h-full w-full object-contain absolute" alt="story"/>
