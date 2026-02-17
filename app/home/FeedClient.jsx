@@ -32,25 +32,6 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
     };
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!ref.current) return;
-
-      const isAtTop = ref.current.getBoundingClientRect().top <= 0;
-
-      setIsStickyActive(prev => {
-        if (prev !== isAtTop) return isAtTop;
-        return prev;
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   // hold post and current logged in user
   const [posts, setPosts] = useState(initialPosts);
   const [user, setUser] = useState(null);
@@ -231,10 +212,10 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background text-foreground">
+    <div className="min-h-screen flex justify-center items-start px-4 pb-2 space-x-2 bg-background text-foreground">
       <Sidebar />
-      <div className={`flex flex-col space-y-4 ${!posts.length && "w-full max-w-md justify-center items-center"} mb-14 md:mb-0`}>
-        <div ref={ref} className={`sticky top-0 w-full max-w-md flex space-x-1 overflow-hidden bg-white border border-line p-2 overscroll-x-contain rounded-md ${isStickyActive ? "rounded-none" : "rounded-md"}`}>
+      <div className={`flex flex-col ${!posts.length && "w-full max-w-md justify-center items-center"} mb-14 md:mb-0`}>
+        <div ref={ref} className={`sticky top-0 w-full max-w-md flex space-x-1 overflow-hidden bg-white border-l border-r border-b border-line p-2`}>
           {activeStoryProfiles && activeStoryProfiles.length > 0 ? (
             activeStoryProfiles.map((profile) => (
               <img key={profile.id} src={`${profile.avatar_url}?t=${Date.now()}`} onClick={() => router.push(`/stories/${profile.username}`)} className="w-10 h-10 shrink-0 rounded-full object-cover object-top-right border-2 border-pink-500 cursor-pointer" alt="story avatar"/>
@@ -247,7 +228,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
           <p className="text-gray-700">No posts yet.</p>
         )}
         {posts.map((post) => (
-          <div key={post.id} className="border border-line w-full max-w-md bg-white rounded-md">
+          <div key={post.id} className="border-l border-b border-r border-line w-full max-w-md bg-white">
             <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline">
               <img className="w-6 h-6 object-cover object-top-right rounded-full" src={`${post.avatar_url}?t=${Date.now()}`} alt="user avatar"/>
               <div className="py-3 font-semibold text-sm">{post.username}</div>
@@ -312,6 +293,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
             </div>
           </div>
         ))}
+        <p className="py-8 text-gray-500 mx-auto">You're all caught up.</p>
       </div>
     </div>
   );
