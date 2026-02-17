@@ -248,7 +248,7 @@ export default function PostClient({ post, profile }) {
             </>
           )}
 
-          <p className="mt-2 text-sm text-gray-800">{localPost.caption}</p>
+          <p className="mt-4 text-sm text-gray-800">{localPost.caption}</p>
         </div>
       </div>
     </>
