@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import supabase from "@/lib/supabase";
-import { Heart, MessageCircle, SendHorizonal, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Heart, MessageCircle, SendHorizonal } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -71,13 +71,6 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
   // openning comments and liking loading animation
   const [loadingComments, setLoadingComments] = useState(false);
   const [loadingLike, setLoadingLike] = useState(false);
-
-  // story states
-  const [selectedUserStories, setSelectedUserStories] = useState([]);
-  const [selectedStoryUser, setSelectedStoryUser] = useState(null);
-  const [loadingStories, setLoadingStories] = useState(false);
-  const [isStoryViewerOpen, setIsStoryViewerOpen] = useState(false);
-  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
   // get the current logged in user
   useEffect(() => {
@@ -237,49 +230,6 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
     alert("Link copied to clipboard!");
   };
 
-  // fetch the stories of a selected user
-  const fetchStoriesForUser = async (profile) => {
-    setSelectedStoryUser(profile);
-    setLoadingStories(true);
-    setSelectedUserStories([]);
-    setIsStoryViewerOpen(true);
-
-    const now = new Date();
-    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-    const { data, error } = await supabase
-      .from("stories")
-      .select("*")
-      .eq("user_id", profile.id)
-      .gte("created_at", twentyFourHoursAgo.toISOString())
-      .order("created_at", { ascending: true });
-
-    if (error) {
-      console.log("Error fetching stories:", error);
-      setLoadingStories(false);
-      return;
-    }
-
-    setSelectedUserStories(data);
-    setCurrentStoryIndex(0);
-    setLoadingStories(false);
-  };
-
-  const goToNextStory = () => {
-    if (currentStoryIndex < selectedUserStories.length - 1) {
-      setCurrentStoryIndex((prev) => prev + 1);
-    } else {
-      setIsStoryViewerOpen(false);
-      setSelectedStoryUser(null);
-    }
-  };
-
-  const goToPreviousStory = () => {
-    if (currentStoryIndex > 0) {
-      setCurrentStoryIndex((prev) => prev - 1);
-    }
-  };
-
   return (
     <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background text-foreground">
       <Sidebar />
@@ -287,7 +237,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
         <div ref={ref} className={`sticky top-0 w-full max-w-md flex space-x-1 overflow-hidden bg-white border border-line p-2 overscroll-x-contain rounded-md ${isStickyActive ? "rounded-none" : "rounded-md"}`}>
           {activeStoryProfiles && activeStoryProfiles.length > 0 ? (
             activeStoryProfiles.map((profile) => (
-              <img key={profile.id} src={`${profile.avatar_url}?t=${Date.now()}`} onClick={() => fetchStoriesForUser(profile)} className="w-10 h-10 shrink-0 rounded-full object-cover object-top-right border-2 border-pink-500 cursor-pointer" alt="story avatar"/>
+              <img key={profile.id} src={`${profile.avatar_url}?t=${Date.now()}`} onClick={() => router.push(`/stories/${profile.username}`)} className="w-10 h-10 shrink-0 rounded-full object-cover object-top-right border-2 border-pink-500 cursor-pointer" alt="story avatar"/>
             ))
           ) : (
             <p className="text-sm text-gray-500">No active stories.</p>
@@ -363,46 +313,6 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
           </div>
         ))}
       </div>
-      {isStoryViewerOpen && (
-        <div className="h-screen fixed inset-0 flex flex-col">
-          {loadingStories ? (
-            <div className="min-h-screen w-full flex items-center justify-center bg-background">
-              <div className="w-6 h-6 border-2 border-gray-100 border-t-gray-900 rounded-full animate-spin"></div>
-            </div>
-          ) : (
-            <>
-              <div className="w-full flex flex-row justify-center items-center bg-white">
-                <div className="flex-1">
-                  <div className="w-full flex justify-between items-center">
-                    <div className="w-fit flex items-center p-2 space-x-2">
-                      <img src={selectedStoryUser.avatar_url} className="h-6 w-6 rounded-full object-cover object-top-right"/>
-                      <span className="font-semibold text-sm">{selectedStoryUser.username}</span>
-                    </div>
-                  </div>
-                  <div className="flex space-x-1 px-2 pb-2  border-b border-line">
-                    {selectedUserStories.map((_, index) => (
-                      <div key={index} className={`flex-1 h-1 rounded-full ${
-                        index <= currentStoryIndex
-                          ? "bg-gray-400"
-                          : "bg-gray-200"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="h-full aspect-square flex justify-center items-center border-b border-line cursor-pointer">
-                  <X size={32} strokeWidth={2} onClick={() => {setIsStoryViewerOpen(null); setSelectedStoryUser(null)}}/>
-                </div>
-              </div>
-              <div className="h-full w-full flex justify-center items-center relative bg-background overflow-x-hidden select-none">
-                <img src={selectedUserStories[currentStoryIndex].image_url} className="h-full w-full object-contain absolute" alt="story"/>
-                <div className="absolute left-0 top-0 w-1/2 h-full" onClick={goToPreviousStory}/>
-                <div className="absolute right-0 top-0 w-1/2 h-full" onClick={goToNextStory}/>
-              </div>
-            </>
-          )}
-        </div>
-      )}
     </div>
   );
 }
