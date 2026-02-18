@@ -129,7 +129,6 @@ export default function ProfileClient({ profile, posts }) {
         </div>
       </div>
 
-      <div className="pt-8 text-foreground">{isCurrentUser ? "Your posts:" : `${profile.username}'s posts:`}</div>
       <div className="grid grid-cols-3 gap-1 mt-2">
         {posts.length === 0 ? (
           <p className="col-span-3 text-center text-gray-400 py-6">The user has made no posts so far.</p>
