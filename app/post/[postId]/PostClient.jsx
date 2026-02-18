@@ -188,7 +188,7 @@ export default function PostClient({ post, profile }) {
   return (
     <>
       <Sidebar />
-      <div key={localPost.id} className="border border-line w-full max-w-md bg-white text-foreground mb-14 md:mb-0 rounded-md">
+      <div key={localPost.id} className="w-full max-w-md border border-line bg-white text-foreground mb-14 md:mb-0">
         <Link href={`/user/${profile.username}`} className="flex flex-row items-center space-x-2 px-2 hover:underline w-fit">
           <img className="w-6 h-6 object-cover object-top-right rounded-full" src={profile.avatar_url} alt="user avatar"/>
           <div className="py-3 font-semibold text-sm">{profile.username}</div>

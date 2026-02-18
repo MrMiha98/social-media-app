@@ -53,7 +53,7 @@ export default async function PostPage({ params }) {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-start space-x-2 p-4 bg-background">
+    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background">
       <PostClient post={enrichedPost} profile={profile} />
     </div>
   );

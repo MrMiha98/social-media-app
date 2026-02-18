@@ -212,7 +212,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-start px-4 pb-2 space-x-2 bg-background text-foreground">
+    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background text-foreground">
       <Sidebar />
       <div className={`flex flex-col ${!posts.length && "w-full max-w-md justify-center items-center"} mb-14 md:mb-0`}>
         <div ref={ref} className={`sticky top-0 w-full max-w-md flex space-x-1 overflow-hidden bg-white border-l border-r border-b border-line p-2`}>
@@ -225,7 +225,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
           )}
         </div>
         {!posts.length && (
-          <p className="text-gray-700">No posts yet.</p>
+          <p className="text-gray-500 p-4">No posts yet.</p>
         )}
         {posts.map((post) => (
           <div key={post.id} className="border-l border-b border-r border-line w-full max-w-md bg-white">
@@ -257,7 +257,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                       fetchComments(post.id);
                     }}}/>
                   <span className="text-sm font-bold text-gray-700">{post.commentCount}</span>
-                  <SendHorizonal size={24} onClick={() => handleCopyLink(post.id)} className="cursor-pointer text-lightforeground hover:text-black transition ml-2" />
+                  <SendHorizonal size={24} onClick={() => handleCopyLink(post.id)} className="cursor-pointer text-lightforeground hover:text-pink-500 transition ml-2" />
                 </div>
 
                 <span className="text-xs text-lightforeground">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
@@ -293,7 +293,9 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
             </div>
           </div>
         ))}
-        <p className="py-8 text-gray-500 mx-auto">You're all caught up.</p>
+        {posts.length !== 0 && (
+          <p className="py-8 text-gray-500 mx-auto">You're all caught up.</p>
+        )}
       </div>
     </div>
   );

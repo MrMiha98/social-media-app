@@ -116,9 +116,9 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background text-foreground">
+    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background text-foreground">
       <Sidebar />
-      <div className="flex flex-col w-full max-w-md px-8 py-2 bg-white border border-line rounded-md">
+      <div className="w-full max-w-md h-screen flex flex-col px-8 py-2 bg-white border border-line">
         <h1 className="text-center text-2xl font-semibold text-foreground mt-4">Upload a <span className="text-orange-600">Post</span> or a <span className="text-pink-600">Story</span></h1>
 
         <div className="flex w-full mt-6 mb-2 border border-line rounded-md overflow-hidden">

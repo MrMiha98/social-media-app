@@ -27,7 +27,7 @@ export default async function UserProfilePage({ params }) {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="min-h-screen flex justify-center items-start p-4 space-x-2 bg-background">
+    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background">
       <Sidebar />
       <ProfileClient profile={profile} posts={posts || []} />
     </div>
