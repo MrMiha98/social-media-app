@@ -55,11 +55,11 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-mute">
+    <main className="flex min-h-screen items-center justify-center sm:bg-mute">
       {loadingAuth ? (
         <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
       ) : (
-        <div className="w-full max-w-sm space-y-6 rounded-xl bg-body border border-line p-8">
+        <div className="w-full sm:max-w-md space-y-6 rounded-xl bg-body sm:border sm:border-line p-8">
           <h1 className="text-center text-lg font-semibold text-lead">Log in to your account</h1>
 
           <form onSubmit={handleLogin} className="text-text text-sm space-y-4">
