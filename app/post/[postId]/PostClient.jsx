@@ -249,8 +249,8 @@ export default function PostClient({ post, profile }) {
                   )}
                 </div>
                 <form onSubmit={(e) => handleCommentPost(e, localPost.id)} className="w-full flex flex-col items-center space-y-2">
-                  <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="w-full px-3 py-2 text-sm text-text rounded-full focus:border-transparent outline-none focus:outline-none focus:ring-1 focus:ring-black/10 border border-line"/>
-                  <button type="submit" className="w-full py-2 text-sm rounded-full active:scale-95 p-3 font-semibold text-body bg-main hover:bg-main/90 cursor-pointer transition">Send</button>
+                  <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="w-full px-3 py-2 text-sm text-text rounded-md border border-line outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+                  <button type="submit" className="w-full py-2 text-sm rounded-md active:scale-95 p-3 font-semibold text-body bg-main hover:bg-main/90 cursor-pointer transition">Send</button>
                 </form>
               </>
             )}

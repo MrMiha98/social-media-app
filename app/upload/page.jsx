@@ -122,17 +122,17 @@ export default function UploadPage() {
         <h1 className="text-center text-xl font-semibold text-lead mt-4">Upload a <span className="text-orange-600">Post</span> or a <span className="text-pink-600">Story</span></h1>
 
         <div className="flex w-full mt-8 mb-2 border border-line rounded-md overflow-hidden">
-          <button type="button" onClick={() => setUploadType("post")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "post" ? "bg-main text-body" : "bg-body text-text hover:bg-text/10"}`}>Post</button>
-          <button type="button" onClick={() => setUploadType("story")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "story"  ? "bg-main text-body" : "bg-body text-text hover:bg-text/10"}`}>Story</button>
+          <button type="button" onClick={() => setUploadType("post")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "post" ? "bg-main text-body" : "bg-mute text-text hover:bg-text/10"}`}>Post</button>
+          <button type="button" onClick={() => setUploadType("story")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "story"  ? "bg-main text-body" : "bg-mute text-text hover:bg-text/10"}`}>Story</button>
         </div>
 
         <form onSubmit={handleUpload} className="flex flex-col space-y-4 mt-8 mb-4">
-          <label className="cursor-pointer rounded-md border border-line bg-body p-3 text-sm text-text hover:bg-text/10 transition">
+          <label className="cursor-pointer rounded-md border border-line bg-mute p-3 text-sm text-text hover:bg-text/10 transition">
             <span>{ imageFile ? imageFile.name : "Browse images…" }</span>
             <input id="image-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden"/>
           </label>
           {uploadType === "post" && (
-            <textarea placeholder="Write a caption..." value={caption} onChange={(e) => setCaption(e.target.value)} className="text-lead min-h-32 resize-none w-full rounded-md border border-line p-3 text-sm outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+            <textarea placeholder="Write a caption..." value={caption} onChange={(e) => setCaption(e.target.value)} className="text-lead min-h-32 bg-mute resize-none w-full rounded-md border border-line p-3 text-sm outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
           )}
           <button type="submit" disabled={loading} className="w-full flex justify-center items-center gap-x-2 cursor-pointer rounded-md p-3 font-semibold text-body bg-main hover:bg-main/90 transition">{loading ? "Uploading..." : "Upload"} <CloudUpload size={24} /></button>
           {message ? ( <p className="text-sm text-center text-red-500">{message}</p> ) : null}

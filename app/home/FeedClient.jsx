@@ -229,9 +229,9 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
         )}
         {posts.map((post) => (
           <div key={post.id} className="border-l border-b border-r border-line w-full bg-body">
-            <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-4 hover:underline">
+            <Link href={`/user/${post.username}`} className="flex flex-row items-center space-x-2 px-4">
               <img className="w-6 h-6 object-cover object-top-right rounded-full" src={`${post.avatar_url}?t=${Date.now()}`} alt="user avatar"/>
-              <div className="py-3 font-bold text-sm text-lead">{post.username}</div>
+              <div className="py-3 font-bold text-sm text-lead hover:underline">{post.username}</div>
             </Link>
 
             <div className="w-full flex justify-center items-center px-4">
@@ -288,8 +288,8 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                     )}
                   </div>
                   <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex flex-col items-center space-y-2">
-                    <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="w-full px-3 py-2 text-sm  text-text rounded-full focus:border-transparent outline-none focus:outline-none focus:ring-1 focus:ring-black/10 border border-line"/>
-                    <button type="submit" className="w-full py-2 text-sm rounded-full active:scale-95 p-3 font-semibold text-body bg-main hover:bg-main/90 cursor-pointer transition">Send</button>
+                    <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="w-full px-3 py-2 text-sm text-text rounded-md border border-line outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+                    <button type="submit" className="w-full py-2 text-sm rounded-md active:scale-95 p-3 font-semibold text-body bg-main hover:bg-main/90 cursor-pointer transition">Send</button>
                   </form>
                 </>
               )}
