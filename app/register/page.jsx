@@ -70,29 +70,38 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background">
+    <main className="flex min-h-screen items-center justify-center bg-mute">
       {loadingAuth ? (
         <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
       ) : (
-          <div className="w-full max-w-sm space-y-6 rounded-2xl bg-white border border-line p-8">
-            <h1 className="text-center text-2xl font-bold text-foreground">Register</h1>
+          <div className="w-full max-w-sm space-y-6 rounded-xl bg-body border border-line p-8">
+            <h1 className="text-center text-lg font-semibold text-lead">Create a new account</h1>
 
-            <form onSubmit={handleRegister} className="space-y-4 text-foreground">
-              <input type="text" placeholder="Username" required value={username} onChange={(e) => setUsername(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
-              <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
-              <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-md border border-gray-300 p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
-              <button type="submit" disabled={loading} className="w-full rounded-md p-3 font-semibold text-white bg-black hover:bg-zinc-800 cursor-pointer transition">{loading ? "Loading..." : "Register"}</button>
+            <form onSubmit={handleRegister} className="text-text text-sm space-y-4">
+              <div className="space-y-1">
+                <p>Username</p>
+                <input type="text" placeholder="Username" required value={username} onChange={(e) => setUsername(e.target.value)} className="w-full rounded-md border border-line p-2 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+              </div>
+              <div className="space-y-1">
+                <p>Email</p>
+                <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-md border border-line p-2 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+              </div>
+              <div className="space-y-1">
+                <p>Password</p>
+                <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full rounded-md border border-line p-2 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+              </div>
+              <button type="submit" disabled={loading} className="w-full rounded-md p-3 font-semibold text-body bg-main hover:bg-main/90 cursor-pointer transition">{loading ? "Loading..." : "Register"}</button>
             </form>
 
-            <p className="text-center text-sm text-lightforeground">
+            <p className="text-center text-sm text-text">
               Already have an account?{" "}
-              <a href="/login" className="font-semibold text-zinc-800 hover:underline">Login</a>
+              <a href="/login" className="font-semibold text-main hover:underline">Login</a>
             </p>
             
             {message ? ( <p className="text-center text-sm text-red-500">{message}</p> ) : null}
           </div>
         )
-      };
+      }
     </main>
   )
 }
