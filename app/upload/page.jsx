@@ -116,25 +116,25 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background text-foreground">
+    <div className="min-h-screen flex justify-center items-start space-x-2 bg-mute">
       <Sidebar />
-      <div className="w-full max-w-md h-screen flex flex-col px-8 py-2 bg-white border border-line">
-        <h1 className="text-center text-2xl font-semibold text-foreground mt-4">Upload a <span className="text-orange-600">Post</span> or a <span className="text-pink-600">Story</span></h1>
+      <div className="w-full md:max-w-md h-screen flex flex-col px-8 py-2 bg-body border border-line">
+        <h1 className="text-center text-xl font-semibold text-lead mt-4">Upload a <span className="text-orange-600">Post</span> or a <span className="text-pink-600">Story</span></h1>
 
-        <div className="flex w-full mt-6 mb-2 border border-line rounded-md overflow-hidden">
-          <button type="button" onClick={() => setUploadType("post")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "post" ? "bg-black text-white" : "bg-white text-lightforeground hover:bg-gray-100"}`}>Post</button>
-          <button type="button" onClick={() => setUploadType("story")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "story"  ? "bg-black text-white" : "bg-white text-lightforeground hover:bg-gray-100"}`}>Story</button>
+        <div className="flex w-full mt-8 mb-2 border border-line rounded-md overflow-hidden">
+          <button type="button" onClick={() => setUploadType("post")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "post" ? "bg-main text-body" : "bg-body text-text hover:bg-text/10"}`}>Post</button>
+          <button type="button" onClick={() => setUploadType("story")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "story"  ? "bg-main text-body" : "bg-body text-text hover:bg-text/10"}`}>Story</button>
         </div>
 
         <form onSubmit={handleUpload} className="flex flex-col space-y-4 mt-8 mb-4">
-          <label className="cursor-pointer rounded-md border border-line bg-white p-3 text-sm text-lightforeground hover:bg-gray-100 transition">
+          <label className="cursor-pointer rounded-md border border-line bg-body p-3 text-sm text-text hover:bg-text/10 transition">
             <span>{ imageFile ? imageFile.name : "Browse images…" }</span>
             <input id="image-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden"/>
           </label>
           {uploadType === "post" && (
-            <textarea placeholder="Write a caption..." value={caption} onChange={(e) => setCaption(e.target.value)} className="text-black resize-none w-full rounded-md border border-line p-3 outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+            <textarea placeholder="Write a caption..." value={caption} onChange={(e) => setCaption(e.target.value)} className="text-lead min-h-32 resize-none w-full rounded-md border border-line p-3 text-sm outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
           )}
-          <button type="submit" disabled={loading} className="w-full flex justify-center items-center gap-x-2 rounded-md p-3 cursor-pointer font-semibold transition text-white bg-black hover:bg-zinc-800">{loading ? "Uploading..." : "Upload"} <CloudUpload size={24} /></button>
+          <button type="submit" disabled={loading} className="w-full flex justify-center items-center gap-x-2 cursor-pointer rounded-md p-3 font-semibold text-body bg-main hover:bg-main/90 transition">{loading ? "Uploading..." : "Upload"} <CloudUpload size={24} /></button>
           {message ? ( <p className="text-sm text-center text-red-500">{message}</p> ) : null}
         </form>
       </div>
