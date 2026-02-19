@@ -35,36 +35,36 @@ export default function Sidebar() {
 
   return (
     <>
-      <nav className="hidden md:sticky md:top-4 md:flex flex-col gap-y-2 bg-background text-black">
-        <div className="px-3 py-4 text-xl font-semibold text-neutral-900 select-none">socy.<span className="text-amber-500 italic">app</span></div>
+      <nav className="hidden md:sticky md:top-4 md:flex flex-col gap-y-2 bg-mute">
+        <div className="px-3 py-4 text-xl font-semibold text-text select-none">socy.<span className="text-main italic">app</span></div>
 
-        <button onClick={() => router.push("/home")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/home" ? "bg-black/7" : "hover:bg-black/7" } cursor-pointer`}>
-          <House size={20} />
-          <span className="text-sm">Home</span>
+        <button onClick={() => router.push("/home")} className={`flex items-start gap-3 pl-4 pr-24 py-2 rounded-full transition ${ pathname === "/home" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" } cursor-pointer text-sm font-medium`}>
+          <House size={20}/>
+          <span>Home</span>
         </button>
 
-        <button onClick={() => router.push("/upload")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/upload" ? "bg-black/7" : "hover:bg-black/7" } cursor-pointer`}>
-          <Upload size={20} />
+        <button onClick={() => router.push("/upload")} className={`flex items-start gap-3 pl-4 pr-24 py-2 rounded-full transition ${ pathname === "/upload" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" } cursor-pointer text-sm font-medium`}>
+          <Upload size={20}/>
           <span className="text-sm">Upload</span>
         </button>
 
-        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === `/user/${username}` ? "bg-black/7" : "hover:bg-black/7"} cursor-pointer`}>
-          <User size={20} />
+        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-start gap-3 pl-4 pr-24 py-2 rounded-full transition ${ pathname === `/user/${username}` ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs"} cursor-pointer text-sm font-medium`}>
+          <User size={20}/>
           <span className="text-sm">Profile</span>
         </button>
       </nav>
 
-      <nav className="fixed bottom-0 left-0 right-0 flex md:hidden justify-center border-t border-line bg-white py-2 space-x-10 text-foreground ">
-        <button onClick={() => router.push("/home")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/home" ? "bg-black/7" : "hover:bg-black/7" } cursor-pointer`}>
-          <House size={24} />
+      <nav className="fixed bottom-0 left-0 right-0 flex md:hidden justify-center border-t border-line py-2 space-x-10 bg-mute">
+        <button onClick={() => router.push("/home")} className={`flex items-start gap-3 px-8 py-2 rounded-xl transition ${ pathname === "/home" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" }`}>
+          <House size={24}/>
         </button>
 
-        <button onClick={() => router.push("/upload")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === "/upload" ? "bg-black/7" : "hover:bg-black/7" } cursor-pointer`}>
-          <Upload size={24} />
+        <button onClick={() => router.push("/upload")} className={`flex items-start gap-3 px-8 py-2 rounded-xl transition ${ pathname === "/upload" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" }`}>
+          <Upload size={24}/>
         </button>
 
-        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${ pathname === `/user/${username}` ? "bg-black/7" : "hover:bg-black/7" } cursor-pointer`}>
-          <User size={24} />
+        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-start gap-3 px-8 py-2 rounded-xl transition ${ pathname === `/user/${username}` ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" }`}>
+          <User size={24}/>
         </button>
       </nav>
     </>
