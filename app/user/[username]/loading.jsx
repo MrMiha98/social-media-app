@@ -3,9 +3,10 @@ import Sidebar from "@/components/Sidebar";
 
 export default function Loading() {
   return (
-    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background">
+    <div className="min-h-screen flex justify-center items-start space-x-2 bg-mute">
       <Sidebar />
-      <div className="h-screen bg-white border border-line p-6 w-full max-w-md">
+      <div className="min-h-screen bg-body md:border-l md:border-r border-line p-6 w-full md:max-w-md relative">
+        <div className="absolute left-0 top-0 right-0 w-full h-20 z-0"></div>
         <div className="flex items-start space-x-5">
           <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 relative">
             <Skeleton className="h-full w-full" />

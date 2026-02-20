@@ -80,20 +80,20 @@ export default function Sidebar() {
         </button>
       </nav>
 
-      <nav className="fixed bottom-0 left-0 right-0 flex md:hidden justify-center border-t border-line py-2 space-x-8 bg-mute">
-        <button onClick={() => router.push("/home")} className={`flex items-start space-x-3 px-8 py-2 rounded-xl transition ${ pathname === "/home" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" }`}>
+      <nav className="fixed bottom-0 left-0 right-0 flex md:hidden justify-center border-t border-line py-2 bg-mute z-10">
+        <button onClick={() => router.push("/home")} className={`flex items-start space-x-3 px-8 py-2 rounded-xl ${ pathname === "/home" ? "bg-main/10 text-main" : "text-subs" }`}>
           <House size={24}/>
         </button>
 
-        <button onClick={() => router.push("/upload")} className={`flex items-start space-x-3 px-8 py-2 rounded-xl transition ${ pathname === "/upload" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" }`}>
+        <button onClick={() => router.push("/upload")} className={`flex items-start space-x-3 px-8 py-2 rounded-xl ${ pathname === "/upload" ? "bg-main/10 text-main" : "text-subs" }`}>
           <Upload size={24}/>
         </button>
 
-        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-start space-x-3 px-8 py-2 rounded-xl transition ${ pathname === `/user/${username}` ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" }`}>
+        <button onClick={() => router.push(`/user/${username}`)} className={`flex items-start space-x-3 px-8 py-2 rounded-xl ${ pathname === `/user/${username}` ? "bg-main/10 text-main" : "text-subs" }`}>
           <User size={24}/>
         </button>
 
-        <button onClick={toggleDarkMode} className="flex items-center justify-start space-x-3 py-2 text-subs">
+        <button onClick={toggleDarkMode} className="flex items-center space-x-3 px-8 py-2 text-subs">
           {darkmode ? <Sun size={20} className="text-yellow-500" /> : <Moon size={20} className="text-subs" />}
         </button>
       </nav>

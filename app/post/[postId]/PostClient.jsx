@@ -189,7 +189,7 @@ export default function PostClient({ post, profile }) {
     <>
       <Sidebar />
       <div className={`flex flex-col w-full md:max-w-md mb-14 md:mb-0`}>
-        <div key={localPost.id} className="border-l border-b border-r border-line w-full bg-body">
+        <div key={localPost.id} className="md:border-l border-b md:border-r border-line w-full bg-body">
           <Link href={`/user/${profile.username}`} className="flex flex-row items-center space-x-2 px-4 hover:underline">
             <img className="w-6 h-6 object-cover object-top-right rounded-full" src={`${profile.avatar_url}?t=${Date.now()}`} alt="user avatar"/>
             <div className="py-3 font-bold text-sm text-lead">{profile.username}</div>

@@ -118,8 +118,8 @@ export default function UploadPage() {
   return (
     <div className="min-h-screen flex justify-center items-start space-x-2 bg-mute">
       <Sidebar />
-      <div className="w-full md:max-w-md h-screen flex flex-col px-8 py-2 bg-body border border-line">
-        <h1 className="text-center text-xl font-semibold text-lead mt-4">Upload a <span className="text-orange-600">Post</span> or a <span className="text-pink-600">Story</span></h1>
+      <div className="w-full md:max-w-md h-screen flex flex-col px-8 py-2 bg-body md:border-l md:border-r border-line">
+        <h1 className="text-center text-xl font-semibold text-lead mt-4">Upload a <span className="text-fire underline">Post</span> or a <span className="text-gold underline">Story</span></h1>
 
         <div className="flex w-full mt-8 mb-2 border border-line rounded-md overflow-hidden">
           <button type="button" onClick={() => setUploadType("post")} className={`flex-1 p-2 text-sm font-semibold cursor-pointer transition ${uploadType === "post" ? "bg-main text-body" : "bg-mute text-text hover:bg-text/10"}`}>Post</button>

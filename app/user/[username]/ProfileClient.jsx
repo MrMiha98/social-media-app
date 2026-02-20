@@ -78,9 +78,10 @@ export default function ProfileClient({ profile, posts }) {
   };
 
   return (
-    <div className="h-screen bg-white border border-line p-6 w-full max-w-md">
+    <div className="min-h-screen bg-body md:border-l md:border-r border-line p-6 w-full md:max-w-md relative">
+      <div className="absolute left-0 top-0 right-0 w-full h-20 z-0 bg-[url('https://images6.alphacoders.com/325/thumb-1920-325041.jpg')]"></div>
           
-      <div className="flex items-start space-x-5">
+      <div className="flex items-start space-x-5 relative">
         {isCurrentUser ? (
           <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
             <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
@@ -97,46 +98,48 @@ export default function ProfileClient({ profile, posts }) {
         )}
         <div className="flex flex-col flex-1">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">{profile.username}</h2>
+            <h2 className="text-2xl font-bold text-white">{profile.username}</h2>
             {isCurrentUser && (
-              <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-red-500 transition cursor-pointer">Log out</button>
+              <button onClick={handleLogout} className="text-sm text-text font-semibold hover:underline cursor-pointer">Log out</button>
             )}
           </div>
           {isCurrentUser && (
-            <p className="text-gray-500 text-sm">{user.email}</p>
+            <p className="text-gray-300 text-xs">{user.email}</p>
           )}
           {isCurrentUser ? (
-            <div className="mt-3">
+            <div className="mt-4">
               {editing ? (
                 <div className="flex space-x-2">
-                  <input type="text" value={bioInput} onChange={(e) => setBioInput(e.target.value)} className="flex-1 p-2 rounded-md border border-line focus:ring-1 focus:ring-black/10 text-black outline-none text-sm"/>
-                  <button onClick={handleSaveBio} className="px-3 py-2 text-white rounded-md bg-black hover:bg-zinc-800 text-sm cursor-pointer">Save</button>
+                  <input type="text" value={bioInput} onChange={(e) => setBioInput(e.target.value)} className="flex-1 rounded-md border border-line px-2 py-1.5 text-xs text-subs outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
+                  <button onClick={handleSaveBio} className="px-3 text-body font-bold rounded-md bg-main hover:bg-main/90 text-xs cursor-pointer">Save</button>
                 </div>
               ) : (
                 <div className="flex justify-between items-start gap-3">
-                  <p className="text-gray-800 text-sm">{profile.bio || "No bio yet"}</p>
-                  <button onClick={() => setEditing(true)} className="text-pink-800 hover:underline text-xs cursor-pointer">Edit</button>
+                  <p className="text-subs text-sm">{profile.bio || "No bio yet"}</p>
+                  <button onClick={() => setEditing(true)} className="text-main font-medium hover:underline text-xs cursor-pointer">Edit</button>
                 </div>
               )}
             </div>
           ) : (
             <div className="mt-3">
               <div className="flex justify-between items-start gap-3">
-                <p className="text-gray-800 text-sm">{profile.bio || "No bio yet"}</p>
+                <p className="text-subs text-sm">{profile.bio || "No bio yet"}</p>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-1 mt-2">
+      <div className="grid grid-cols-3 gap-1 mt-4 bg-body">
         {posts.length === 0 ? (
           <p className="col-span-3 text-center text-gray-400 py-6">The user has made no posts so far.</p>
         ) : (
           posts.map((post) => (
             <Link key={post.id} href={`/post/${post.id}`}>
-              <div className="aspect-square overflow-hidden rounded-sm cursor-pointer">
-                <img src={post.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition"/>
+              <div className="aspect-square overflow-hidden rounded-sm cursor-pointer relative">
+                <div className="absolute bottom-0 left-0 w-full h-full bg-transparent hover:bg-black/10 transition"></div>
+                <img src={post.image_url} alt="" className="w-full h-full object-cover"/>
+                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-black/20 to-transparent pointer-events-none"></div>
               </div>
             </Link>
           ))

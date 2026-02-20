@@ -3,6 +3,8 @@ import ProfileClient from './ProfileClient';
 import supabase from '@/lib/supabase';
 
 export default async function UserProfilePage({ params }) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   // get the dynamic username url
   const { username } = await params;
 
@@ -27,7 +29,7 @@ export default async function UserProfilePage({ params }) {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="min-h-screen flex justify-center items-start px-4 space-x-2 bg-background">
+    <div className="min-h-screen flex justify-center items-start space-x-2 bg-mute">
       <Sidebar />
       <ProfileClient profile={profile} posts={posts || []} />
     </div>
