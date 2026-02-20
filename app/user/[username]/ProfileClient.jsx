@@ -83,18 +83,33 @@ export default function ProfileClient({ profile, posts }) {
           
       <div className="flex items-start space-x-5 relative">
         {isCurrentUser ? (
-          <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
-            <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
-            <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
+          profile.avatar_url ? (
+            <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
+              <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
+              <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                <Image size={24} />
-                <Plus size={24} />
+                <Image size={24} color="white"/>
+                <Plus size={24} color="white"/>
               </div>
-          </label>
+            </label>
+          ) : (
+            <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
+              <div className="h-full w-full bg-black text-white text-xs flex justify-center items-center group-hover:text-black">Upload avatar</div>
+              <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                <Image size={24} color="white"/>
+                <Plus size={24} color="white"/>
+              </div>
+            </label>
+          )
         ) : (
-          <div className="w-28 h-28 rounded-full overflow-hidden">
-            <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
-          </div>
+          profile.avatar_url ? (
+            <div className="w-28 h-28 rounded-full overflow-hidden">
+              <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
+            </div>
+          ) : (
+            <div className="w-28 h-28 bg-black text-white text-xs flex justify-center items-center rounded-full overflow-hidden">No avatar yet</div>
+          )
         )}
         <div className="flex flex-col flex-1">
           <div className="flex items-center justify-between">
