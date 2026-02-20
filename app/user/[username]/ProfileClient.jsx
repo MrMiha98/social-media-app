@@ -106,7 +106,7 @@ export default function ProfileClient({ profile, posts }) {
           {isCurrentUser ? (
             <p className="text-gray-300 text-xs">{user.email}</p>
           ) : (
-            <p className="text-subs text-xs">{profile.bio}</p>
+            <p className="text-gray-300 text-xs">{profile.bio}</p>
           )}
           {isCurrentUser && (
             <div className="mt-4">
