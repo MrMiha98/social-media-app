@@ -87,19 +87,12 @@ export default function ProfileClient({ profile, posts }) {
             <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
               <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
               <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                <Image size={20} color="white"/>
-                <Plus size={20} color="white"/>
-              </div>
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-xs text-white font-semibold">Change avatar</div>
             </label>
           ) : (
-            <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer group relative">
-              <div className="h-full w-full bg-black text-white text-xs flex justify-center items-center group-hover:text-black">Upload avatar</div>
+            <label className="w-28 h-28 rounded-full overflow-hidden shrink-0 cursor-pointer relative group">
+              <div className="h-full w-full bg-black text-white text-xs flex justify-center items-center group-hover:underline">Upload avatar</div>
               <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                <Image size={20} color="white"/>
-                <Plus size={20} color="white"/>
-              </div>
             </label>
           )
         ) : (
