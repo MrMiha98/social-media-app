@@ -103,10 +103,12 @@ export default function ProfileClient({ profile, posts }) {
               <button onClick={handleLogout} className="text-sm text-text font-semibold hover:underline cursor-pointer">Log out</button>
             )}
           </div>
-          {isCurrentUser && (
-            <p className="text-gray-300 text-xs">{user.email}</p>
-          )}
           {isCurrentUser ? (
+            <p className="text-gray-300 text-xs">{user.email}</p>
+          ) : (
+            <p className="text-subs text-xs">{profile.bio}</p>
+          )}
+          {isCurrentUser && (
             <div className="mt-4">
               {editing ? (
                 <div className="flex space-x-2">
@@ -120,19 +122,13 @@ export default function ProfileClient({ profile, posts }) {
                 </div>
               )}
             </div>
-          ) : (
-            <div className="mt-3">
-              <div className="flex justify-between items-start gap-3">
-                <p className="text-subs text-sm">{profile.bio || "No bio yet"}</p>
-              </div>
-            </div>
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-1 mt-4 bg-body">
         {posts.length === 0 ? (
-          <p className="col-span-3 text-center text-gray-400 py-6">The user has made no posts so far.</p>
+          <p className="col-span-3 text-center text-sm text-subs py-6">The user has made no posts so far.</p>
         ) : (
           posts.map((post) => (
             <Link key={post.id} href={`/post/${post.id}`}>
