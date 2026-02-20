@@ -88,8 +88,8 @@ export default function ProfileClient({ profile, posts }) {
               <img src={`${profile.avatar_url}?t=${Date.now()}`} alt="pfp" />
               <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                <Image size={24} color="white"/>
-                <Plus size={24} color="white"/>
+                <Image size={20} color="white"/>
+                <Plus size={20} color="white"/>
               </div>
             </label>
           ) : (
@@ -97,8 +97,8 @@ export default function ProfileClient({ profile, posts }) {
               <div className="h-full w-full bg-black text-white text-xs flex justify-center items-center group-hover:text-black">Upload avatar</div>
               <input type="file" className="h-full w-full" hidden onChange={(e) => handleAvatarUpload(e)} />
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                <Image size={24} color="white"/>
-                <Plus size={24} color="white"/>
+                <Image size={20} color="white"/>
+                <Plus size={20} color="white"/>
               </div>
             </label>
           )
