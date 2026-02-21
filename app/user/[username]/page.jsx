@@ -3,8 +3,6 @@ import ProfileClient from './ProfileClient';
 import supabase from '@/lib/supabase';
 
 export default async function UserProfilePage({ params }) {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
   // get the dynamic username url
   const { username } = await params;
 
