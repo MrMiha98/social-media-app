@@ -39,7 +39,7 @@ export default function StoryViewerClient({ profile, stories }) {
             ))}
           </div>
           <div className="h-fit flex flex-row justify-between">
-            <Link href={`/user/${profile.username}`} className="flex flex-row items-center space-x-2 text-sm text-white font-bold hover:underline">
+            <Link href={`/user/${profile.username}`} className="flex flex-row items-center space-x-2 text-sm text-white font-bold hover:underline select-none">
               <img src={profile.avatar_url} className="h-10 w-10 rounded-full object-cover object-top-right" alt="User Avatar" />
               <span>{profile.username}</span>
             </Link>
