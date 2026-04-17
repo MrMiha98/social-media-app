@@ -3,10 +3,8 @@ import ProfileClient from './ProfileClient';
 import supabase from '@/lib/supabase';
 
 export default async function UserProfilePage({ params }) {
-  // get the dynamic username url
   const { username } = await params;
 
-  // get all the data for this specific user
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
@@ -19,7 +17,6 @@ export default async function UserProfilePage({ params }) {
     );
   }
 
-  // get all of the users posts
   const { data: posts } = await supabase
     .from("posts")
     .select("id, image_url")

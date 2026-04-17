@@ -8,16 +8,12 @@ import Link from 'next/link';
 export default function ProfileClient({ profile, posts }) {
   const router = useRouter();
 
-  // hold the currently logged in user
   const [user, setUser] = useState(null);
 
-  // status
   const [editing, setEditing] = useState(false);
 
-  // hold the bio input text if the user is on his own profile
   const [bioInput, setBioInput] = useState(profile.bio || '');
 
-  // get the currently logged in user
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -30,7 +26,6 @@ export default function ProfileClient({ profile, posts }) {
 
   const isCurrentUser = user?.id === profile.id;
 
-  // handle bio change
   const handleSaveBio = async () => {
     await supabase
       .from("profiles")
@@ -41,7 +36,6 @@ export default function ProfileClient({ profile, posts }) {
     location.reload();
   };
 
-  // handle uploading of a new avatar
   const handleAvatarUpload = async (e) => {
     const file = e.target.files[0];
     const fileExt = file.name.split('.').pop();
@@ -70,7 +64,6 @@ export default function ProfileClient({ profile, posts }) {
     location.reload();
   }
 
-  // handle logging out
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/login");
