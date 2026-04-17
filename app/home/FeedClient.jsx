@@ -139,7 +139,7 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
 
     const { data: comments, error: commentsError } = await supabase
       .from("comments")
-      .select("id, content, user_id")
+      .select("id, content, user_id, created_at")
       .eq("post_id", postId)
 
     if (commentsError) {
@@ -211,6 +211,29 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
     alert("Link copied to clipboard!");
   };
 
+  const formatPostDate = (createdAt) => {
+    const now = new Date();
+    const postDate = new Date(createdAt);
+
+    // difference in milliseconds
+    const differenceInMs = now.getTime() - postDate.getTime();
+
+    // convert to days
+    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+    if (differenceInDays < 1) {
+      return "Today";
+    }
+
+    if (differenceInDays < 7) {
+      const days = Math.floor(differenceInDays);
+      return days + (days === 1 ? " day ago" : " days ago");
+    }
+
+    const weeks = Math.floor(differenceInDays / 7);
+    return weeks + (weeks === 1 ? " week ago" : " weeks ago");
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-start space-x-2 bg-mute">
       <Sidebar />
@@ -265,29 +288,32 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                   <Forward size={24} onClick={() => handleCopyLink(post.id)} className="cursor-pointer text-subs hover:text-lead transition" />
                 </div>
 
-                <span className="text-xs text-text font-medium">{new Date(post.created_at).toLocaleDateString("en-GB")}</span>
+                <span className="text-xs text-text font-medium">{formatPostDate(post.created_at)}</span>
               </div>
 
               {openComments === post.id && (
                 <>
                   <div className="w-full px-2 py-4 space-y-2">
                     {loadingComments ? (
-                      <div className="w-6 h-6 border-2 border-line border-t-lead rounded-full animate-spin"></div>
+                      <div className="w-6 h-6 border-2 border-line border-t-lead rounded-full animate-spin mb-2"></div>
                     ) : comments.length > 0 ? (
                       comments.map((comment) => (
                         <div key={comment.id} className="flex items-start space-x-2">
                           <img src={`${comment.avatar_url}?t=${Date.now()}`} className="w-6 h-6 object-cover object-top-right rounded-full"/>
                           <div className="-mt-0.5">
-                            <span className="font-semibold text-sm text-lead">{comment.username}</span>
-                            <p className="text-xs text-subs font-medium">{comment.content}</p>
+                            <div className="font-semibold text-sm text-lead">
+                              <span>{comment.username}</span>
+                              <span className="text-[10px] text-text font-medium"> - {formatPostDate(comment.created_at)}</span>
+                            </div>
+                            <p className="text-xs text-subs font-medium pb-2">{comment.content}</p>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="font-semibold text-xs text-subs">No comments yet.</p>
+                      <p className="font-semibold text-xs text-subs mb-2">No comments yet.</p>
                     )}
                   </div>
-                  <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex flex-col items-center space-y-2">
+                  <form onSubmit={(e) => handleCommentPost(e, post.id)} className="w-full flex flex-col items-center space-y-2 -mt-2">
                     <input type="text" placeholder="Write a comment..." value={postComment} onChange={(e) => setPostComment(e.target.value)} className="w-full px-3 py-2 text-sm text-text rounded-md border border-line outline-none focus:outline-none focus:ring-1 focus:ring-black/10"/>
                     <button type="submit" className="w-full py-2 text-sm rounded-md active:scale-95 p-3 font-semibold text-body bg-main hover:bg-main/90 cursor-pointer transition">Send</button>
                   </form>

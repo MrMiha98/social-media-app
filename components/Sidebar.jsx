@@ -57,7 +57,7 @@ export default function Sidebar() {
   return (
     <>
       <nav className="hidden md:sticky md:top-4 md:flex flex-col gap-y-2 bg-mute">
-        <div className="px-3 py-4 text-xl font-semibold text-text select-none">socy.<span className="text-main italic">app</span></div>
+        <div className="px-3 py-4 text-xl font-semibold text-text select-none"><button className="cursor-pointer" onClick={() => router.push("/home")}>socy.<span className="text-main italic">app</span></button></div>
 
         <button onClick={() => router.push("/home")} className={`w-48 flex items-center justify-start space-x-3 py-2 rounded-full transition ${ pathname === "/home" ? "bg-main/10 text-main" : "hover:bg-grey hover:text-lead text-subs" } cursor-pointer text-sm font-medium`}>
           <House size={20} className="ml-4"/>
