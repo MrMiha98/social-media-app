@@ -9,12 +9,10 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // hold the currently logged in users username
   const [username, setUsername] = useState("");
 
   const [darkmode, setDarkmode] = useState(false);
 
-  // retrieve the currently logged in users username
   useEffect(() => {
     const goToProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -44,10 +42,8 @@ export default function Sidebar() {
     setDarkmode((prev) => {
       const newMode = !prev;
 
-      // toggle the class in one line
       document.documentElement.classList.toggle("dark", newMode);
 
-      // persist preference
       localStorage.setItem("theme", newMode ? "dark" : "light");
 
       return newMode;
