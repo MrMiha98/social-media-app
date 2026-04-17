@@ -7,29 +7,21 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 
 export default function PostClient({ post, profile }) {
-  // loading animations
   const [loadingLike, setLoadingLike] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
 
-  // comments opened or not
   const [openComments, setOpenComments] = useState(null);
 
-  // currently logged in users id
   const [currentUserId, setCurrentUserId] = useState(null);
 
-  // save the receives post from the props locally
   const [localPost, setLocalPost] = useState(post);
 
-  // hold the text for the comment about to be posted
   const [postComment, setPostComment] = useState("");
 
-  // hold all the comments on this specific post
   const [comments, setComments] = useState([]);
 
-  // get all the profiles
   const [posts, setPosts] = useState([]); 
 
-  // get the currently logged in users id
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -42,7 +34,6 @@ export default function PostClient({ post, profile }) {
     checkUser();
   }, []);
 
-  // check if the currently logged in user has already liked the post
   useEffect(() => {
     const checkHasLiked = async () => {
       if (!currentUserId) {
@@ -67,7 +58,6 @@ export default function PostClient({ post, profile }) {
     checkHasLiked();
   }, [currentUserId, post.id]);
 
-  // handle liking
   const toggleLike = async (post) => {
     setLoadingLike(true);
 
@@ -110,7 +100,6 @@ export default function PostClient({ post, profile }) {
     setLoadingLike(false);
   };
 
-  // handle getting the comments on this specific post
   const fetchComments = async (postId) => {
     setLoadingComments(true);
     setComments([]);
@@ -153,7 +142,6 @@ export default function PostClient({ post, profile }) {
     setLoadingComments(false);
   };
 
-  // handle posting a comment
   const handleCommentPost = async (e, postId) => {
     e.preventDefault();
 
@@ -189,10 +177,8 @@ export default function PostClient({ post, profile }) {
     const now = new Date();
     const postDate = new Date(createdAt);
 
-    // difference in milliseconds
     const differenceInMs = now.getTime() - postDate.getTime();
 
-    // convert to days
     const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
 
     if (differenceInDays < 1) {

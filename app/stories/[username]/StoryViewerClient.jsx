@@ -8,7 +8,6 @@ import { CircleChevronRight, CircleChevronLeft, X } from "lucide-react";
 export default function StoryViewerClient({ profile, stories }) {
   const router = useRouter();
 
-  // story states
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   
   const goToNextStory = () => {
@@ -27,10 +26,8 @@ export default function StoryViewerClient({ profile, stories }) {
     const now = new Date();
     const storyDate = new Date(createdAt);
 
-    // difference in milliseconds
     const differenceInMs = now.getTime() - storyDate.getTime();
 
-    // convert to minutes
     const differenceInMinutes = differenceInMs / (1000 * 60);
 
     if (differenceInMinutes < 60) {
@@ -38,7 +35,6 @@ export default function StoryViewerClient({ profile, stories }) {
       return minutes + (minutes === 1 ? " min ago" : " mins ago");
     }
 
-    // convert to hours
     const differenceInHours = differenceInMinutes / 60;
     const hours = Math.floor(differenceInHours);
 
