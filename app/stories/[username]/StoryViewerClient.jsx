@@ -23,6 +23,28 @@ export default function StoryViewerClient({ profile, stories }) {
     }
   };
 
+  const formatStoryTime = (createdAt) => {
+    const now = new Date();
+    const storyDate = new Date(createdAt);
+
+    // difference in milliseconds
+    const differenceInMs = now.getTime() - storyDate.getTime();
+
+    // convert to minutes
+    const differenceInMinutes = differenceInMs / (1000 * 60);
+
+    if (differenceInMinutes < 60) {
+      const minutes = Math.floor(differenceInMinutes);
+      return minutes + (minutes === 1 ? " min ago" : " mins ago");
+    }
+
+    // convert to hours
+    const differenceInHours = differenceInMinutes / 60;
+    const hours = Math.floor(differenceInHours);
+
+    return hours + (hours === 1 ? " h ago" : " h ago");
+  };
+
   return (
     <div className="h-screen flex justify-center items-center md:p-4 bg-[rgb(016,016,019)]">
       <X size={40} strokeWidth={2} className="hidden md:block absolute right-4 top-4 md:text-text hover:text-white transition cursor-pointer" onClick={() => router.back()}/>
@@ -39,10 +61,15 @@ export default function StoryViewerClient({ profile, stories }) {
             ))}
           </div>
           <div className="h-fit flex flex-row justify-between">
-            <Link href={`/user/${profile.username}`} className="flex flex-row items-center space-x-2 text-sm text-white font-bold hover:underline select-none">
-              <img src={profile.avatar_url} className="h-10 w-10 rounded-full object-cover object-top-right" alt="User Avatar" />
-              <span>{profile.username}</span>
-            </Link>
+            <div className="w-full flex flex-row items-center justify-between space-x-2 text-sm font-bold select-none">
+              <Link href={`/user/${profile.username}`}>
+                <div className="flex flex-row items-center">
+                  <img src={profile.avatar_url} className="h-10 w-10 rounded-full object-cover object-top-right" alt="User Avatar" />
+                  <span className="pl-3 text-white hover:underline">{profile.username}</span>
+                </div>
+              </Link>
+              <div className="text-text">{formatStoryTime(stories[currentStoryIndex].created_at)}</div>
+            </div>
             <X strokeWidth={2} size={40} className="md:hidden -mr-2 text-white/80" onClick={() => router.back()}/>
           </div>
         </div>
