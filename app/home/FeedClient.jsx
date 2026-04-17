@@ -302,7 +302,9 @@ export default function FeedClient({ initialPosts, likes, activeStoryProfiles })
                           <img src={`${comment.avatar_url}?t=${Date.now()}`} className="w-6 h-6 object-cover object-top-right rounded-full"/>
                           <div className="-mt-0.5">
                             <div className="font-semibold text-sm text-lead">
-                              <span>{comment.username}</span>
+                              <Link href={`/user/${comment.username}`} className="hover:underline">
+                                <span>{comment.username}</span>
+                              </Link>
                               <span className="text-[10px] text-text font-medium"> - {formatPostDate(comment.created_at)}</span>
                             </div>
                             <p className="text-xs text-subs font-medium pb-2">{comment.content}</p>
